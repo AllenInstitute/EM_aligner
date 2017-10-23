@@ -46,7 +46,7 @@ else
 end
 
 %% append tiles to existing collection
-%disp('Ingesting data (append)');
+disp('Ingesting data (append)');
 resp_append = append_renderer_stack(rc_target, rc_base, fn, v, disableValidation);
 
 %% cleanup

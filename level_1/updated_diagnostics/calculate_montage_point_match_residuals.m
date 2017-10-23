@@ -53,7 +53,9 @@ end
 if ~isfield(options, 'outlier_deviation_for_residuals'), options.outlier_deviation_for_residuals = 10; end
 if ~isfield(options, 'min_points'), options.min_points = 10; end
 if ~isfield(options,'output_data_per_tile'), options.output_data_per_tile = true; end
-if ~isfield(options, 'dir_scratch'), options.dir_scratch = '/scratch/ackermand'; end
+if ~isfield(options, 'dir_scratch'), options.dir_scratch = '/data/nc-em2/gayathrim/Janelia_Pipeline/scratch'; end
+options.show_deformations = 1;
+options.show_residuals = 1;
 
 dir_current = pwd;
 dir_scratch = [options.dir_scratch '/temp_' num2str(randi(3000000))];

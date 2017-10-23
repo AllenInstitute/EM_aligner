@@ -2,9 +2,10 @@
 
 
 dir_curr = pwd;
-dir_EM_aligner = '/groups/flyTEM/home/khairyk/EM_aligner';   % your local EM_aligner directory
-cd /groups/flyTEM/home/khairyk/EM_aligner/matlab_compiled    % deploy to this directory
+dir_EM_aligner = '/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/EM_aligner';   % your local EM_aligner directory
+cd /allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/EM_aligner/matlab_compiled    % deploy to this directory
 
+setenv('MCC_USE_DEPFUN','1')
 
 
 astr = [];

@@ -1,11 +1,11 @@
 classdef tile
-    % tile  Summary: 
-    %           Represents one image (tile) 
-    % 
+    % tile  Summary:
+    %           Represents one image (tile)
+    %
     %   tile constructors:
     %       *Scenario 1: obj = tile(js_struct); % struct; a json tile blob that was converted to a Matlab struct and passed as input argument
     %       *Scenario 2: obj = tile(z, id, t1, t2, t3, t4, t5, t6, col, row, cam, path, temca_conf, rotation, renderer_id); % the full tile configuration is expected explicitly (except for the mask which gets set separately (if at all)
-    % 
+    %
     % Author: Khaled Khairy. khairyk@janelia.hhmi.org. FlyTEM team project.
     %         Janelia Research Campus. 2016
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,10 +26,10 @@ classdef tile
         H = 0;
         W = 0;
         state = 1;             % 0 = this tile is marked for removal and should not be rendered (or has invalid transformation information)
-        owner = 'flyTEM';
-        project='FAFB00';
+        owner = 'gayathri';
+        project='EM_Phase1';
         stack = '';
-        server = 'http://10.40.3.162:8080/render-ws/v1'; %'http://tem-services.int.janelia.org:8080/render-ws/v1'; % 
+        server = 'http://10.128.124.14:8998/render-ws/v1'; %'http://tem-services.int.janelia.org:8080/render-ws/v1'; %
         features = [];        % store features information
         validPoints = [];     % point locations corresponding to features
         featuresMethod = 'SURF'; % method to be used for calculating features
@@ -38,16 +38,16 @@ classdef tile
         SURF_NumScaleLevels = 8;
         SURF_MetricThreshold = 1500;
         SURF_MaxFeatures = 5000;
-        dir_temp_render = '/scratch/khairyk';% there is no elegant way to do this. [a resp] = system('whoami'); dir_temp_render = ['/scratch/' resp];
-        renderer_client = '/groups/flyTEM/flyTEM/render/bin/render.sh';
+        dir_temp_render = '/data/nc-em2/gayathrim/Janelia_Pipeline/scratch';% there is no elegant way to do this. [a resp] = system('whoami'); dir_temp_render = ['/scratch/' resp];
+        renderer_client = '/home/gayathrim/libraries/render_20170613/render-ws-java-client/src/main/scripts/render.sh';
         fetch_local = 0;
         scale = 1;
 
     end
-    
-    
+
+
     methods
-        
+
         %% constructor
         function obj = tile(z, id, t1, t2, t3, t4, t5, t6,...
                 col, row, cam, path, temca_conf, rotation, renderer_id)
@@ -67,7 +67,7 @@ classdef tile
                 if isfield(p.layout, 'rotation'),obj.rot = p.layout.rotation;end
                 if isfield(p.layout, 'temca'),obj.temca_conf = str2double(p.layout.temca);end
                 obj.sectionId = p.layout.sectionId;
-                
+
                 if strcmp(p.mipmapLevels.x0.imageUrl(1:4), 'file')
                     if isfield(p.mipmapLevels.x0, 'imageUrl'),
                         obj.path = p.mipmapLevels.x0.imageUrl(6:end);
@@ -83,7 +83,7 @@ classdef tile
 %                 if numel(p.transforms.specList)>1,
 %                     p.transforms.specList = p.transforms.specList(end);
 %                 end
-                
+
                 Tstr = p.transforms.specList(end).dataString;
                 Tdouble    = str2double(strsplit(Tstr));
 
@@ -148,7 +148,7 @@ classdef tile
                 %if ~exist(obj.path,'file'), disp(['Tile not found: ' obj.path]);end
             end
         end
-        %% 
+        %%
         function im = get_mask(obj)
             try
             im = [];
@@ -159,7 +159,7 @@ classdef tile
                 disp('Error retrieving mask');
             end
         end
-        
+
         %% image retrieval
         function im = get_image(obj, filter, scale)
             % will just read the path if obj.fetch_local==1
@@ -168,7 +168,7 @@ classdef tile
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if nargin<2, filter='false';end
             if nargin<3, scale = 1.0;end
-            
+
             % below will set filter to true if any other filter (for post-filtering)
             % is selected. Will set all filters to false if filter == 'false'
             if nargin>=2 && ~strcmp(filter, 'false')
@@ -178,7 +178,7 @@ classdef tile
                 post_filter = 'false';
                 filter = 'false';
             end
-            
+
             if obj.fetch_local==1
                 im = imread(obj.path);
             elseif obj.fetch_local==0
@@ -214,6 +214,7 @@ classdef tile
             fn = [obj.dir_temp_render '/tile_image_' num2str(randi(1000)) '_' obj.renderer_id '.jpg'];
             % we will try four times
             cmd = sprintf('%s --memory 7g --out %s --parameters_url "%s"', obj.renderer_client, fn, url);
+            cmd
             [a, resp_str] = system(cmd);
             file_ready = 0;
             count = 1;
@@ -284,7 +285,7 @@ classdef tile
             end
             im = rgb2gray(im);
         end
-        
+
         %%
         function [im,R] = get_warped_image(obj, scale)
             if nargin<2, scale = 1.0;end
@@ -300,7 +301,7 @@ classdef tile
                             ||strcmp(class(obj.tform), 'nonlin2d')
                         px = obj.W/2;
                         py = obj.H/2;
-                     
+
                         bo = [0 0;obj.W 0;0 obj.H;obj.W obj.H];
                         p = transformPointsInverse(obj.tform,bo);
                         Wbox = [min(p(:,1)) min(p(:,2)) max(p(:,1))-min(p(:,1)) max(p(:,2))-min(p(:,2))];

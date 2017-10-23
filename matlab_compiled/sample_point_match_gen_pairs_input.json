@@ -7,21 +7,21 @@
         "SURF_Scale": 0.6
 	},
 	"source_collection": {
-		"stack": "v12_acquire_merged",
-		"owner": "flyTEM",
-		"project": "FAFB00",
-		"service_host": "10.37.5.60:8080",
-		"baseURL": "http://10.37.5.60:8080/render-ws/v1",
+		"stack": "Phase1RawData_10",
+		"owner": "gayathri",
+		"project": "EM_Phase1",
+		"service_host": "em-131fs:8080",
+		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"verbose": 1
 	},
 	"target_point_match_collection": {
-		'stack": "mystack",
-        "server": "http://10.40.3.162:8080/render-ws/v1",
-		"owner": "flyTEM",
-		"match_collection": "v12_SURF"
+		'stack": "SURF_pointMatches_test_Phase1RawData_10",
+        "server": "http://em-131fs:8080/render-ws/v1",
+		"owner": "gayathri",
+		"match_collection": "SURF_pointMatches_test_Phase1RawData_10"
 	},
     "min_points": 3,
-    "scratch": "/scratch/khairyk",
-    "renderer_client": "/groups/flyTEM/flyTEM/render/bin/render.sh",
+    "scratch": "/data/nc-em2/gayathrim/Janelia_Pipeline/scratch",
+    "renderer_client": "/data/nc-em2/gayathrim/renderBin/bin/render.sh",
 	"verbose": 1
 }

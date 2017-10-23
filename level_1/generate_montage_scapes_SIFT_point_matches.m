@@ -40,22 +40,22 @@ t = tile;
 if nargin<2, run_now = 1;end
 if ~isfield(ms, 'number_of_spark_nodes'), ms.number_of_spark_nodes = num2str(2);end
 %% clean up any previous jobs
-dir_spark_work = [ms.base_output_dir '/' ms.project '/' ms.stack  '/' ms.run_dir];
-if run_now
-    kk_mkdir(dir_spark_work);
-    %% construct and submit point-match calculation for montage scapes
-    cmd_str = [ms.script ' ' ms.service_host ' ' ms.owner ' ' ms.project ' '...
-        ms.stack ' ' ms.first ' ' ms.last ' ' ms.fd_size ' ' ...
-        ms.min_sift_scale ' ' ms.max_sift_scale ' ' ms.steps ' ' ...
-        ms.scale ' ' ms.similarity_range ' ' ms.skip_similarity_matrix ' ' ...
-        ms.skip_aligned_image_generation ' ' ms.base_output_dir ' ' ...
-        ms.run_dir];% ' ' ms.number_of_spark_nodes];
-    [a, resp_str] = system(cmd_str);
-    disp(resp_str);
-end
+dir_spark_work = [ms.base_output_dir '/' ms.project '/' ms.stack];%  '/' ms.run_dir];
+% if run_now
+%     %kk_mkdir(dir_spark_work);
+%     %% construct and submit point-match calculation for montage scapes
+%     cmd_str = [ms.script ' ' ms.service_host ' ' ms.owner ' ' ms.project ' '...
+%         ms.stack ' ' ms.first ' ' ms.last ' ' ms.fd_size ' ' ...
+%         ms.min_sift_scale ' ' ms.max_sift_scale ' ' ms.steps ' ' ...
+%         ms.scale ' ' ms.similarity_range ' ' ms.skip_similarity_matrix ' ' ...
+%         ms.skip_aligned_image_generation ' ' ms.base_output_dir ' ' ...
+%         ms.run_dir];% ' ' ms.number_of_spark_nodes];
+%     [a, resp_str] = system(cmd_str);
+%     disp(resp_str);
+% end
 if nargin<3
     %% wait for files to finish generating
-    f = dir([dir_spark_work '/solver_*']);
+    f = dir([dir_spark_work '/solver_22*']); % This needs to be changed by removing the 22
     dir_solver = [dir_spark_work '/' f.name];
     fn_matches = [dir_solver '/matches.txt'];
     while exist(fn_matches,'file')~=2
@@ -66,7 +66,7 @@ if nargin<3
             disp(['Waiting for file: ' dir_solver '/matches.txt']);
             pause(30);
         else
-            disp(['Waiting for file: ' dir_solver '*/matches.txt']);
+            disp(['Waiting for file: ' dir_solver '/matches.txt']);
             pause(waitTime);
         end
     end
@@ -172,7 +172,7 @@ if isempty(pairs),
         t(ix).renderer_id = num2str(IDS{1}(ix));
         t(ix).path = IDS{2}{ix};
     end
-    
+
 else
     [Lin] = pairs_to_pm(L, options, pairs);
     %% add a weights vector to pm struct
@@ -201,7 +201,7 @@ else
     Lin.pm.W(delix) = [];
     Lin.pm.adj(delix,:) = [];
     Lin.pm.M(delix,:) = [];
-    
+
     %% check that all montage scapes are present in Lin by splitting in z and
     % checking that all z's are present
     ll = split_z(Lin);
@@ -230,7 +230,7 @@ else
     %
     disp('Available connected tiles:');
     disp(zrange(ai,:));
-    
+
     %%%%% manually fix connectivity
     % make a stack of the original images
     clear t;
@@ -242,7 +242,7 @@ else
         t(ix).renderer_id = num2str(IDS{1}(ix));
         t(ix).path = IDS{2}{ix};
     end
-    
+
     %%
     %Lin = update_adjacency(Lin);
     pm = Lin.pm;

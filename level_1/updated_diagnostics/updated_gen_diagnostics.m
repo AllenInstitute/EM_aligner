@@ -29,8 +29,8 @@ end
 
 if ~isfield(options, 'outlier_deviation_for_ratios'), options.outlier_deviation_for_ratios = 0.04; end
 if ~isfield(options, 'outlier_deviation_for_residuals'), options.outlier_deviation_for_residuals = 10; end
-if ~isfield(options, 'show_deformations'), options.show_deformations = false; end
-if ~isfield(options, 'show_residuals'), options.show_residuals = false; end
+if ~isfield(options, 'show_deformations'), options.show_deformations = true; end
+if ~isfield(options, 'show_residuals'), options.show_residuals = true; end
 if ~isfield(options, 'show_table'), options.show_table = false; end
 if ~isfield(options, 'output_data_per_tile'), options.output_data_per_tile = true; end
 

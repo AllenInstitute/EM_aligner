@@ -26,7 +26,11 @@ str = ['head -3 ' fn_layout];[a, c] = system(str);if rc.verbose, disp(c); end
 str = ['tail -3 ' fn_layout];[a, c] = system(str);if rc.verbose, disp(c); end
 fid = fopen(fn_layout, 'r');
 % C = textscan(fid,'%n%s%n%n%n%n%n%n%n%n%n%s%n%n%n%s', 'delimiter', '\t');
-C = textscan(fid,'%n%s%n%n%n%n%n%n%n%n%s%s%s%s%s%s', 'delimiter', '\t');
+%% sectionId, tileId, affineData (6 columns representing either last transform's Affine or identify with homogeneous defined by stageX/stageY in Karsh/Khaled order),  imageCol, imageRow, camera, rawPath, temca, rotation, z
+% C = textscan(fid,'%n%s%n%n%n%n%n%n%*[^\t]%*[^\t]%s%s%s%s%s%s',
+% 'delimiter', '\t'); % this just ignores the values for imageCol and
+% imageRow
+C = textscan(fid, '%n%s%n%n%n%n%n%n%*[^\n]', 'delimiter', '\t'); % this ignores everything other than sectionId, tileId, and affine transformation
 fclose(fid);
 delete(fn_layout);
 section_id = C{1};

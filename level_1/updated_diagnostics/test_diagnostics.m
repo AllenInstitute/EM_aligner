@@ -1,5 +1,5 @@
 % % % diagnostics
-options.dir_scratch = '/scratch/ackermand';
+options.dir_scratch = '/data/nc-em2/gayathrim/Janelia_Pipeline/scratch';
 options.xs_weight = 0.5;
 options.min_points            = 10;
 options.max_points            = 100;
@@ -13,17 +13,17 @@ options.outlier_deviation_for_ratios = 0.10; % Cutoff for area ratio and perimet
 
 % Source, used for area and perimeter ratios, empty if don't want area and
 % perimeter calculations
-rcsource.baseURL = 'http://10.37.5.60:8080/render-ws/v1';
-rcsource.owner = 'flyTEM';
-rcsource.project = 'FAFB00';
-rcsource.stack = 'v12_acquire_merged';
+rcsource.baseURL = 'http://em-131fs:8998/render-ws/v1';
+rcsource.owner = 'gayathri';
+rcsource.project = 'MM2';
+rcsource.stack = 'mm2_acquire_8bit';
 rcsource = [];
 
 % Original, unbeautified stack
-rc_original.baseURL = 'http://10.37.5.60:8080/render-ws/v1';
-rc_original.owner = 'flyTEM';
-rc_original.project = 'FAFB00';
-rc_original.stack = 'v13_align';
+rc_original.baseURL = 'http://em-131fs:8998/render-ws/v1';
+rc_original.owner = 'gayathri';
+rc_original.project = 'MM2';
+rc_original.stack = 'mm2s';
 rc_original.verbose = 0;
 
 % First and last sections to be analyzed

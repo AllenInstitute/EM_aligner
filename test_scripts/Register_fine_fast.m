@@ -145,7 +145,7 @@ for ix = 1:numel(zu)   % loop over sections
     count = count + 1;
     for nix = 1:opts.nbrs   % loop over neighboring sections
         if (ix+nix)<=numel(zu)
-            %disp(['cross-layer: ' num2str(ix) ' ' sID{ix} ' -- ' num2str(nix) ' ' sID{ix+nix}]);
+            disp(['cross-layer: ' num2str(ix) ' ' sID{ix} ' -- ' num2str(nix) ' ' sID{ix+nix}]);
             sID_all{count,1} = sID{ix};
             sID_all{count,2} = sID{ix+nix};
             ismontage(count) = 0;
@@ -166,9 +166,11 @@ np = {};  % store a vector with number of points in point-matches (so we don't n
 parfor ix = 1:size(sID_all,1)   % loop over sections
     %disp([sID_all{ix,1}{1} ' ' sID_all{ix,2}{1} ' ' num2str(ismontage(ix))]);
     if ismontage(ix)
+        disp('loading montage pm');
         [m, a, w, n] = load_montage_pm(pm, sID_all{ix,1}, map_id,...
             opts.min_points, opts.max_points, wopts);
     else
+        disp('loading cross section pm');
         [m, a, w, n] = load_cross_section_pm(pm, sID_all{ix,1}, sID_all{ix,2}, ...
             map_id, opts.min_points, opts.max_points, wopts, fac(ix));
     end

@@ -15,15 +15,15 @@ LAST_Z=$6 #""                         # z value of last layer to generate (leave
 
 # SIFT parameters
 FD_SIZE=$7 #"8" #"4"  # feature descriptor size
-                  # The SIFT-descriptor consists of n×n gradient histograms, each from a 4×4px block. 
-                  # n is this value. Lowe (2004) uses n=4. We found larger descriptors with n=8 
+                  # The SIFT-descriptor consists of n×n gradient histograms, each from a 4×4px block.
+                  # n is this value. Lowe (2004) uses n=4. We found larger descriptors with n=8
                   # perform better for Transmission Electron Micrographs from serial sections
 MIN_SIFT_SCALE=$8 #"0.55" #"0.75"
 MAX_SIFT_SCALE=$9 #"1.0"
-STEPS=${10} #"3"          # Keypoint candidates are extracted at all scales between maximum image size and minimum image size. 
+STEPS=${10} #"3"          # Keypoint candidates are extracted at all scales between maximum image size and minimum image size.
                    # This Scale Space is represented in octaves    each covering a fixed number of discrete scale steps
-                   # from σ0 to 2σ0. More steps result in more but eventually less stable keypoint candidates. 
-                   # Tip: Keep 3 as suggested by Lowe (2004) and do not use more than 10. 
+                   # from σ0 to 2σ0. More steps result in more but eventually less stable keypoint candidates.
+                   # Tip: Keep 3 as suggested by Lowe (2004) and do not use more than 10.
 
 # output parameters
 SCALE=${11} #"0.05"                         # scale of layer montage images
@@ -110,19 +110,21 @@ echo """
   launching Spark job
 """
 
-/groups/flyTEM/flyTEM/render/spark/bin/inflame.sh ${NUMBER_OF_SPARK_NODES} /groups/flyTEM/flyTEM/render/lib/current-align.jar org.janelia.saalfeldlab.renderalign.LayerOrderAnalyzer ${ARGV}
+echo ${ARGV}
+
+#/groups/flyTEM/flyTEM/render/spark/bin/inflame.sh ${NUMBER_OF_SPARK_NODES} /groups/flyTEM/flyTEM/render/lib/current-align.jar org.janelia.saalfeldlab.renderalign.LayerOrderAnalyzer ${ARGV}
 
 
-# from /usr/local/spark-current/conf/spark-env.sh
-LIKELY_SPARK_LOG_DIR=~/.spark/logs/$(date +%H-%F)
+## from /usr/local/spark-current/conf/spark-env.sh
+#LIKELY_SPARK_LOG_DIR=~/.spark/logs/$(date +%H-%F)
 
-sleep 2
+#sleep 2
 
-qstat | grep spark
+#qstat | grep spark
 
-echo """
-  cluster logs will be written to ${LOG_DIR}
+#echo """
+#  cluster logs will be written to ${LOG_DIR}
 
-  internal spark logs will likely be written to ${LIKELY_SPARK_LOG_DIR}
+#  internal spark logs will likely be written to ${LIKELY_SPARK_LOG_DIR}
 
-"""
+#"""

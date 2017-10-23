@@ -16,7 +16,7 @@ function resp = append_renderer_stack(rc, rc_base, fn, MET_format, disableValida
 if nargin<6
 verbose = 0;
 end
-if nargin<5, disableValidation = 0;end
+if nargin<5, disableValidation = 1;end
 check_input(rc, rc_base, fn, MET_format);
 
 % str1_source     = sprintf('PROJECT_PARAMS="--baseDataUrl %s --owner %s --project %s --changeMode REPLACE_LAST";', rc.baseURL, rc_base.owner, rc_base.project);
@@ -33,20 +33,20 @@ check_input(rc, rc_base, fn, MET_format);
 % strcmd          = [str9 str10 str1_source target_project str2 str3 str4 str11 str6 str12];
 
 if ~isfield(rc, 'renderbinPath')
-    rc.renderbinPath = '/groups/flyTEM/flyTEM/render/bin';
+    rc.renderbinPath = '/data/nc-em2/gayathrim/Janelia_Pipeline/renderBin/bin';
 end
 
 if disableValidation==0
-    str12           = sprintf('%s/run_ws_client.sh 1G org.janelia.render.client.ImportMETClient --baseDataUrl %s --owner %s --project %s --changeMode REPLACE_LAST --targetProject %s --stack %s --targetStack %s --targetOwner %s --metFile %s --formatVersion %s;', ...
+    str12           = sprintf('%s/run_ws_client.sh 8G org.janelia.render.client.ImportMETClient --baseDataUrl %s --owner %s --project %s --changeMode REPLACE_LAST --targetProject %s --stack %s --targetStack %s --targetOwner %s --metFile %s --formatVersion %s;', ...
         rc.renderbinPath, rc.baseURL, rc_base.owner, rc_base.project, rc.project, rc_base.stack, rc.stack, rc.owner, fn, MET_format);
 else
     if verbose, disp('Disabling validation on the Renderer side');end
-    str12           = sprintf('%s/run_ws_client.sh 1G org.janelia.render.client.ImportMETClient --baseDataUrl %s --owner %s --project %s --changeMode REPLACE_LAST --targetProject %s --stack %s --targetStack %s --targetOwner %s --metFile %s --formatVersion %s --disableValidation;', ...
+    str12           = sprintf('%s/run_ws_client.sh 8G org.janelia.render.client.ImportMETClient --baseDataUrl %s --owner %s --project %s --changeMode REPLACE_LAST --targetProject %s --stack %s --targetStack %s --targetOwner %s --metFile %s --formatVersion %s --disableValidation;', ...
         rc.renderbinPath, rc.baseURL, rc_base.owner, rc_base.project, rc.project, rc_base.stack, rc.stack, rc.owner, fn, MET_format);
 end
 strcmd          = [str12];
 
-
+disp(strcmd)
 try
     if verbose 
         kk_clock();

@@ -115,6 +115,7 @@ for ix = 1:size(chnks,1)
     if ~isempty(rctarget)
         ingest_section_into_renderer_database(mL,rctarget, rc, pwd,...
             opts.translate_to_origin, opts.complete, opts.disableValidation);
+        %ingest_section_into_renderer_database_overwrite(mL, rctarget, rc, pwd, opts.translate_to_origin);
         if verbose, disp('Ingesting:'); disp(rctarget);end
     end
     catch err_ingest

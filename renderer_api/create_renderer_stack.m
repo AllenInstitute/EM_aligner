@@ -20,7 +20,7 @@ if ~isfield(rc, 'versionNotes'), rc.versionNotes = 'none';end
 
 % default the renderer binary to Janelia's setup
 if ~isfield(rc, 'renderbinPath')
-    rc.renderbinPath = '/groups/flyTEM/flyTEM/render/bin';
+    rc.renderbinPath = '/data/nc-em2/gayathrim/Janelia_Pipeline/renderBin/bin';
 end
 
 strcmd = sprintf('%s/manage-stack.sh --baseDataUrl %s --owner %s --project %s --action CREATE --stack %s --versionNotes "%s";',...
@@ -64,6 +64,7 @@ if ~isfield(rc, 'baseURL'), disp_usage; error('baseURL not provided');end
 if ~isfield(rc, 'owner'), disp_usage; error('owner not provided');end
 if ~isfield(rc, 'project'), disp_usage; error('project not provided');end
 if ~isfield(rc, 'stack'), disp_usage; error('stack not provided');end
+if ~isfield(rc, 'renderbinPath'), disp_usage; error('render bin path not provided');end
 
 
 %%

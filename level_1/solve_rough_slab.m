@@ -64,10 +64,12 @@ function [L2, needs_correction, pmfn, zsetd, zrange, t,dir_spark_work, cmd_str, 
 
 %% define target directores and file names for storage
 %dir_rough_intermediate_store = '/nobackup/flyTEM/khairy/FAFB00v13/montage_scape_pms';
-target_solver_path = [dir_rough_intermediate_store '/solver_' num2str(nfirst) '_' num2str(nlast) ];
+target_solver_path = [dir_rough_intermediate_store '/solver_' num2str(nfirst) '.00_' num2str(nlast) '.00' ];
+%target_solver_path = dir_rough_intermediate_store;
 target_ids = [target_solver_path '/ids.txt'];
 target_matches = [target_solver_path '/matches.txt'];
 target_layer_images = [target_solver_path];
+target_layer_images = [dir_rough_intermediate_store '/layer_images'];
     disp('Target layer images stored at:');
     disp(target_layer_images);
     disp('Matches stored at:');
@@ -78,7 +80,8 @@ target_layer_images = [target_solver_path];
 if run_now==0
     precalc_ids = target_ids;
     precalc_matches = target_matches;
-    precalc_path = target_solver_path;
+    %precalc_path = target_solver_path;
+    precalc_path = dir_rough_intermediate_store;
 end
 
 
@@ -111,10 +114,10 @@ end
 %% organize directories/files and store intermediate data
 source_layer_images = [dir_spark_work '/layer_images'];
 if run_now==1
-    kk_mkdir(target_layer_images);
-    movefile(source_layer_images, target_layer_images);
-    movefile(pmfn, target_matches);
-    movefile(fn_ids, target_ids);
+    %kk_mkdir(target_layer_images);
+    %movefile(source_layer_images, target_layer_images);
+    %movefile(pmfn, target_matches);
+    %movefile(fn_ids, target_ids);
     disp('Target layer images stored at:');
     disp(target_layer_images);
     disp('Matches stored at:');
@@ -133,6 +136,8 @@ zuf(find(intersect(zu, missing_images))) = [];
 
 for imix = 1:numel(zuf)
     fn_im = sprintf('%s/layer_images/%.1f.png', target_solver_path,zuf(imix));
+    fn_im = sprintf('%s/layer_images/%.1f.png', dir_spark_work,zuf(imix));
+    %fn_im = sprintf('%s/layer_images/%.1f.png', precalc_path, zuf(imix));
     L2.tiles(imix).path = fn_im;
     L2.tiles(imix).fetch_local = 1;
     t(imix).path = fn_im;
@@ -319,6 +324,7 @@ if  ms.center_box<1.0
     L2.pm.np = np;
     L2.pm
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -387,9 +393,9 @@ if needs_correction==0
 
 
 %%% sosi--- make sure solver did something
-for tix = 1:numel(L2.tiles)
-disp([tix zu(tix) L2.tiles(tix).tform.T([1 2 4 5])  mL3.tiles(tix).tform.T([1 2 4 5])]);
-end
+%for tix = 1:numel(L2.tiles)
+%disp([tix zu(tix) L2.tiles(tix).tform.T([1 2 4 5])  mL3.tiles(tix).tform.T([1 2 4 5])]);
+%end
 
 % for tix = 1:numel(L2.tiles)
 % disp([tix zu(tix) L2.tiles(tix).tform.T([1 2 4 5])]);
@@ -408,7 +414,7 @@ end
     disp('-- Loading montages (typical time for large FAFB sections and 32 workers --> 150 seconds)');
     tic
     parfor zix = 1:numel(zu)
-        disp(zix);
+        %disp(zix);
         L_montage(zix) = Msection(rctarget_montage, zu(zix));
     end
     toc
@@ -419,7 +425,7 @@ end
     tic
     %%% this is really slow .... speed up --- sosi
     for lix = 1:numel(L_montage)
-        disp(lix);
+        %disp(lix);
         L_montage(lix) = get_bounding_box(L_montage(lix));
     end
     mL3.update_tile_info_switch = -1;
@@ -450,7 +456,7 @@ end
     disp('loop to update montage sections ......');
     %%%% sosi ---- again... this takes too long, consider for instead of parfor
     parfor lix = 1:numel(L_montage)
-        disp(lix);
+        %disp(lix);
         b1 = L_montage(lix).box;
         dx = b1(1);dy = b1(3);
         tmx1 = [1 0 0; 0 1 0; -dx -dy 1];  % translation matrix for section box
@@ -458,6 +464,9 @@ end
         tiles = L_montage(lix).tiles;
         T3 = mL3T{lix};
         for tix = 1:numel(L_montage(lix).tiles)
+            % montage transform * its translation to origin * scale to the
+            % size of downsamples * apply rough alignment transform *
+            % translation for downsamples * inverse scale 
             newT = tiles(tix).tform.T * tmx1 * smx * T3 * tmx2 * (invsmx);
             tiles(tix).tform.T = newT;
         end
@@ -537,7 +546,7 @@ cs = 1:chks:ntiles;
 cs(end) = ntiles;
 disp(' .... ingesting ....');
 parfor ix = 1:numel(cs)-1
-    disp(ix);
+    %disp(ix);
     vec = cs(ix):cs(ix+1);
     export_to_renderer_database(rcout, rc, pwd, Tout(vec,:),...
         tIds(vec), z_val(vec), v, opts.disableValidation);

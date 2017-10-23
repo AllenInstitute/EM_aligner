@@ -3,28 +3,29 @@ clear all;clc
 %% configure
 
 % source stack for sections
-rc.stack          = 'v2_rough';
-rc.owner          ='flyTEM';
-rc.project        = 'spc';
-rc.service_host   = '10.40.3.162:8080';
+rc.stack          = 'Phase1RawData_AIBS';
+rc.owner          ='gayathri';
+rc.project        = 'EM_Phase1';
+rc.service_host   = 'em-131fs:8080';
 rc.baseURL        = ['http://' rc.service_host '/render-ws/v1'];
 
 % output stack with only selected tiles
 % rcout.stack          = ['v2_rough_reduced'];
 % rcout.stack          = 'v2_rough_try_7_slab_g_reduced';
-rcout.stack          = 'v2_rough_gm_4000_4563';
-rcout.owner          ='flyTEM';
-rcout.project        = 'spc';
-rcout.service_host   = '10.40.3.162:8080';
+rcout.stack          = 'Phase1RawData_test';
+rcout.owner          ='gayathri';
+rcout.project        = 'EM_Phase1';
+rcout.service_host   = 'em-131fs:8080';
 rcout.baseURL        = ['http://' rcout.service_host '/render-ws/v1'];
+rcout.renderbinPath ='/data/nc-em2/gayathrim/Janelia_Pipeline/renderBin/bin';
 
 % where are the source image montage-scapes?
-dir_source_images = '/nrs/spc/matlab_work/rough/v2_rough_manual/layer_images';
-dir_temp_ingest = '/groups/spc/spc/scratch';
+dir_source_images = '/data/em-131fs/gayathri/downsampledSections';
+dir_temp_ingest = '/data/nc-em2/gayathrim/Janelia_Pipeline/scratch';
 
 %% load sections and associate (load) mosaic images
-fn = dir([dir_source_images '/*.png'] );
-scale = 0.04;
+fn = dir([dir_source_images '/2267*.jpg'] );
+scale = 0.05; %95.3/3840;
 zid  = {};
 for fix = 1:numel(fn)
     zid{fix} = fn(fix).name(1:end-4);
@@ -41,7 +42,7 @@ redo_lst = [4311 4392 4428 4485 4486 4492 4493];
 redo_lst = [3879 3880 3882:3886];
 
 redo_lst = [];
-redo_lst = [4539:4541];
+redo_lst = [2267];
 z_num = str2double(zid);
 indx_redo = [];
 for ix = 1:numel(redo_lst)
@@ -59,7 +60,8 @@ vec = [indx_redo 395:400];
 
 vec = 574:600;
 vec = 713:1000;
-% vec = 1:numel(fn);
+vec = 1:numel(fn);
+
 % Gayathri: use range 1730:numel(fn)
 
 %% this can take some time --- don't go overboards with the range of vec
@@ -99,8 +101,8 @@ for fix = vec
     disp('ingesting');
     % uncomment below to ingest into rcout
     %% ingest into Renderer collection
-    disp('Deleting section');disp(L(fix).z);
-    resp = delete_renderer_section(rcout, L(fix).z);
+    %disp('Deleting section');disp(L(fix).z);
+    %resp = delete_renderer_section(rcout, L(fix).z);
     
     
     opts.disableValidation = 1;
@@ -113,6 +115,7 @@ for fix = vec
     tIds = cell(ntiles,1);
     for tix = 1:ntiles
      tIds{tix} = Ls1(fix).tiles(tix).renderer_id;
+     Ls1(fix).tiles(tix).path
     end
     z_val = zeros(ntiles,1);
     for tix = 1:ntiles
@@ -123,13 +126,13 @@ for fix = vec
     disp('... export to MET ');
     
     v = 'v1';
-%     if stack_exists(rcout)
-%         resp = create_renderer_stack(rcout);
-%     end
-%     if ~stack_exists(rcout)
-%         disp('.... target collection not found, creating new collection in state: ''Loading''');
-%         resp = create_renderer_stack(rcout);
-%     end
+    if stack_exists(rcout)
+        resp = create_renderer_stack(rcout);
+    end
+    if ~stack_exists(rcout)
+        disp('.... target collection not found, creating new collection in state: ''Loading''');
+        resp = create_renderer_stack(rcout);
+    end
     
     chks = round(ntiles/4);
     cs = 1:chks:ntiles;
