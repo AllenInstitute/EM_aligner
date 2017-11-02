@@ -1,0 +1,49 @@
+{
+	"solver_options": {
+		"min_tiles": 3,
+		"degree": 1,
+		"outlier_lambda": 1000,
+		"solver": "backslash",
+		"min_points": 10,
+        "max_points": 100,
+		"stvec_flag": 0,
+		"conn_comp": 1,
+		"distributed": 0,
+		"lambda": 0.1,
+		"edge_lambda": 0.1,
+		"small_region_lambda": 10,
+		"small_region": 5,
+		"calc_confidence": 1,
+		"translation_fac": 1,
+        "use_peg": 1,
+        "peg_weight": 0.00001,
+        "peg_npoints": 5
+	},
+	"source_collection": {
+		"stack": "v12_acquire_merged",
+		"owner": "flyTEM",
+		"project": "FAFB00",
+		"service_host": "10.37.5.60:8080",
+		"baseURL": "http://10.37.5.60:8080/render-ws/v1",
+		"verbose": 1
+	},
+	"source_point_match_collection": {
+		"server": "http://10.40.3.162:8080/render-ws/v1",
+		"owner": "flyTEM",
+		"match_collection": "FAFB_pm_2"
+	},
+	"target_collection": {
+		"stack": "EXP_test_montage_section_5",
+		"owner": "flyTEM",
+		"project": "test",
+		"service_host": "10.37.5.60:8080",
+		"baseURL": "http://10.37.5.60:8080/render-ws/v1",
+		"verbose": 1,
+        "initialize": 0,
+        "complete": 1
+	},
+	"z_value": 5,
+    "filter_point_matches": 1,
+    "temp_dir":"/scratch/khairyk",
+	"verbose": 1
+}

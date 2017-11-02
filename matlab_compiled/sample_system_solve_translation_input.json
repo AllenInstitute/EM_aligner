@@ -1,0 +1,59 @@
+{
+	"first_section": 1,
+	"last_section": 3,
+	"solver_options": {
+		"dir_scratch": "/scratch/ackermand",
+		"degree": 0,
+		"solver": "backslash",
+		"transfac": 1,
+		"nbrs": 36,
+		"nbrs_step": 1,
+		"xs_weight": 1,
+		"min_points": 3,
+		"max_points": "_Inf_",
+		"filter_point_matches": 1,
+		"outlier_lambda": 100,
+		"min_tiles": 2,
+		"pastix": {
+			"ncpus": 8,
+			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
+			"split": 1
+		},
+		"matrix_only": 0,
+		"distribute_A": 16,
+		"distributed": 0,
+		"disableValidation": 1,
+		"use_peg": 0,
+		"pmopts": {
+			"NumRandomSamplingsMethod": "Desired confidence",
+			"MaximumRandomSamples": 5000,
+			"DesiredConfidence": 99.9,
+			"PixelDistanceThreshold": 0.1
+		},
+		"verbose": 1,
+		"debug": 0
+	},
+	"source_collection": {
+		"owner": "flyTEM",
+		"project": "trautmane_test",
+		"stack": "montage_canvas_tier_0",
+		"service_host": "10.40.3.162:8080",
+		"baseURL": "http://10.40.3.162:8080/render-ws/v1",
+		"verbose": 0
+	},
+	"target_collection": {
+		"owner": "flyTEM",
+		"project": "trautmane_test",
+		"stack": "montage_canvas_tier_0_translation",
+		"service_host": "10.40.3.162:8080",
+		"baseURL": "http://10.40.3.162:8080/render-ws/v1",
+		"verbose": 0
+	},
+	"source_point_match_collection": {
+		"server": "http://10.40.3.162:8080/render-ws/v1",
+		"owner": "flyTEM",
+		"match_collection": "trautmane_test_montage_canvas_tier_0",
+		"verbose": 0
+	},
+	"verbose": 1
+}

@@ -52,22 +52,23 @@ else
     if ~strcmp(options.solver,'backslash') ...
             && ~strcmp(options.solver,'backslash--noreg') ...
             && ~strcmp(options.solver,'lsqlin')
-        if options.use_ilu && isempty(options.L2)
-            L2 = [];U2 = [];
+        if options.use_ilu 
             if options.verbose,disp('Calculating preconditioner');end
-            %q = colamd(K);
             [L2,U2] = ilu(K,struct('type',options.ilu_type,'droptol',options.ilu_droptol, 'udiag', options.ilu_udiag));
         else
+            if isfield(options, 'L2')
             L2 = options.L2;
             U2 = options.U2;
+            else
+                L2 = [];
+                U2 = [];
+            end
         end
-        iL2 = L2;
-        iU2 = U2;
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     flag = -999;
     if strcmp(options.solver, 'lsqlin')
-        if options.verbose,disp('------------ Performing backslash x2 = K\Lm solution ');end
+        if options.verbose,disp('------------ Performing lsqlin ');end
         x2 = lsqlin(A, b, B, d);
         
         

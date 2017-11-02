@@ -1,4 +1,4 @@
-##Prerequisites
+## Prerequisites
 We are assuming that the Renderer and point-match services (and associated database) are set up and accessible for example at http://tem-services.int.janelia.org.
 Also, you are using Matlab 2016b and above with toolboxes: Computer Vision Systems (or Video and Blockset), ImageProcessing, Statistics, (optional) Matlab compiler and (optional) Parallel computing. The EM_aligner directory and subdirectories are on your Matlab path.
 
@@ -21,7 +21,6 @@ An example json input file is provided below.
 
 
 ```json
-
 {
     "__comments": {
         "comment_0": "IMPORTANT: Before running check: source_collection, target_collection ...",
@@ -177,30 +176,41 @@ An example json input file is provided below.
 ## Montage a series of sections using Matlab directly and assuming precalculated point-matches
 Use this if you already have precalculated point-matches. It perfoms a solve only.
 Montage one or more sections. This will  solve the registration problem using "solver_options", and persist the resulting transformations into the Renderer collection "target_collection". 
+See example below for montaging FAFB
 
 
-'''json
+```json
 
 % solver options
+disp('----only performing translation as regularizer');
+sl.solver_options.translation_only = 1;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 sl.solver_options.degree                = 1;
 sl.solver_options.solver                = 'backslash';
-sl.solver_options.min_points            = 10;
-sl.solver_options.max_points            = 100;
-sl.solver_options.lambda                = 0.1;              % regularization parameter
-sl.solver_options.edge_lambda           = 0.1;
+sl.solver_options.min_points            = 3;
+sl.solver_options.max_points            = 50;
+sl.solver_options.lambda                = 1e-1;              % regularization parameter
+sl.solver_options.edge_lambda           = sl.solver_options.lambda;
 sl.solver_options.translation_fac       = 1;
 sl.solver_options.use_peg               = 1;                % peg
-sl.solver_options.peg_weight            = 1e-2;             % peg
-sl.solver_options.peg_npoints           = 10;                % peg
+sl.solver_options.peg_weight            = 1e-5;             % peg
+sl.solver_options.peg_npoints           = 50;                % peg
+sl.solver_options.da                    = 0.1;
 
-sl.solver_options.outlier_lambda        = 1000;
-sl.solver_options.small_region          = 5;
-sl.solver_options.calc_confidence       = 1;
-sl.solver_options.small_region_lambda   = 10;
-sl.solver_options.stvec_flag            = 0;
-sl.solver_options.conn_comp             = 1;
 sl.solver_options.distributed           = 0;
 sl.solver_options.min_tiles             = 3;
+sl.solver_options.verbose               = 0;
+sl.solver_options.nbrs                  = 0;
+sl.solver_options.filter_point_matches  = 1;
+sl.solver_options.dir_scratch           = '/scratch/khairyk';
+sl.solver_options.verbose               = 0;
+
+
+sl.solver_options.pmopts.NumRandomSamplingsMethod = 'Desired confidence';
+sl.solver_options.pmopts.MaximumRandomSamples = 7000;
+sl.solver_options.pmopts.DesiredConfidence = 99.5;
+sl.solver_options.pmopts.PixelDistanceThreshold = 0.1;
 
 % configure source collection
 sl.source_collection.stack          = 'v12_acquire_merged';
@@ -211,9 +221,9 @@ sl.source_collection.baseURL        = 'http://10.37.5.60:8080/render-ws/v1';
 sl.source_collection.verbose        = 0;
 
 % configure target collection
-sl.target_collection.stack          = 'Revised_FAFB_montage_kk_m2';
+sl.target_collection.stack          = 'kk14_montage';
 sl.target_collection.owner          = 'flyTEM';
-sl.target_collection.project        = 'FAFB00_beautification';
+sl.target_collection.project        = 'FAFBv14_kk';
 sl.target_collection.service_host   = '10.37.5.60:8080';
 sl.target_collection.baseURL        = 'http://10.37.5.60:8080/render-ws/v1';
 sl.target_collection.versionNotes   = 'Created using script /nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/Beautification_script_generate_all_montages.m';
@@ -224,31 +234,34 @@ sl.target_collection.initialize     = 0;
 % configure point-match collection(s)
 clear pm;
 pmix = 1;
+
 pm(pmix).server = 'http://10.40.3.162:8080/render-ws/v1';
 pm(pmix).owner  = 'flyTEM';
-pm(pmix).match_collection = 'FAFB_pm_2';
-pmix = pmix + 1;
+pm(pmix).match_collection = 'FAFB_pm_7';pmix = pmix + 1;
+
 sl.source_point_match_collection = pm;
 
 % other configurations
 sl.z_value = 1;
-sl.filter_point_matches = 1;
 sl.temp_dir = '/scratch/khairyk';
+sl.dir_scratch = sl.temp_dir;
 sl.verbose = 0;
 
-
+temp_config_fn ='/nrs/flyTEM/khairy/FAFB00v14/matlab_production_scripts/sl.mat';
+save (temp_config_fn, 'sl');
 
 %% call solve_montage_SL for every section and save diagnostics
 kk_clock;
 failed = zeros(100,1);
 save sl sl;
 parfor ix = 1:7062
-    c = load('sl.mat');
-    sl = c.sl;
-    sl.z_value = ix;
+    c = load(temp_config_fn, 'sl');
+    config = c.sl;
+    config.z_value = ix;
     try
-    solve_montage_SL(sl);
+    solve_montage_SL(config);
     catch err_montage
+        kk_disp_err(err_montage);
         failed(ix) = 1;
     end
 end
@@ -260,6 +273,6 @@ if sum(failed)
 disp('Failed section list:');
 disp(find(failed));
 end
-               
-'''
+```
+
 

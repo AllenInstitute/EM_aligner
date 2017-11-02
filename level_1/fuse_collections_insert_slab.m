@@ -1,4 +1,4 @@
-function [resp] = fuse_collections_insert_slab(rcsource, rcfixed, rcmoving, overlap)
+function [resp] = fuse_collections_insert_slab(rcsource, rcfixed, rcmoving, overlap, complete)
 %%% insert existing rcmoving slab into larger rcfixed slab
 %%% input: fixed collection
 %%%        moving collection
@@ -31,7 +31,7 @@ function [resp] = fuse_collections_insert_slab(rcsource, rcfixed, rcmoving, over
 % % 
 % % 
 % % overlap = [1185 1190 1200 1204];
-
+if nargin<5, complete = 1; end
 %% read range
 disp('Reading section id ranges...');
 [zu1, sID1, sectionId1, z1, ns1] = get_section_ids(rcfixed, overlap(1), overlap(2));
@@ -328,17 +328,7 @@ toc
 
 %%
 disp('Assembling slab composed of transformed (and interpolated) sections ...');
-tic
-if collection_start,
-    
-    disp('-- collection start: assembling full set');
-    L = Msection([tiles11(:)' tiles21t(:)' tiles22t(:)']);
-    %L = Msection([L11.tiles; L21t.tiles; L22t.tiles]);
-    
-else
-    L = Msection([tiles21t(:)' tiles22t(:)']);
-end
-toc
+ L = Msection([tiles21t(:)' tiles22t(:)']);
 disp('Done!');
 
 
@@ -387,15 +377,31 @@ disp('Ingesting into renderer database using append.');
 %     resp = set_renderer_stack_state_complete(rcout);
 %     disp('Done!');
 % 
-%     % %%%%%%%%%%%%%%%%%%%%% just distribute MET file generation and ingestion
-                             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rcout = rcfixed;
+%     % %%%%%%%%%%%%%%%%%%%%% just distribute MET file generation and ingestion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+rcout = rcfixed;
 if ~stack_exists(rcout)
     disp('Target collection not found, creating new collection in state: ''Loading''');
     resp = create_renderer_stack(rcout);
 end
 
+if stack_complete(rcout)
+    disp('Cannot append COMPLETE stack: setting state to LOADING');
+    resp = set_renderer_stack_state_loading(rcout);
+end
+
+%%%% delete the affected section
+disp('Removing affected sections completely from the fixed collection ----------------');
+parfor six = overlap(1):overlap(4)
+    try
+    resp = delete_renderer_section(rcfixed, six,0);
+    catch err_delete_section
+        kk_disp_err(err_delete_section);
+    end
+end
+disp('--------------------------------------------------------------------------------');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+resp = set_renderer_stack_state_complete(rcout);
 if stack_complete(rcout)
     disp('Cannot append COMPLETE stack: setting state to LOADING');
     resp = set_renderer_stack_state_loading(rcout);
@@ -511,5 +517,7 @@ end
 toc
 
 %% Complete the stack
-disp('Complete stack')
-resp = set_renderer_stack_state_complete(rcout);
+if complete
+    disp('Complete stack')
+    resp = set_renderer_stack_state_complete(rcout);
+end

@@ -177,15 +177,20 @@ end
 
 
 % %%%
-% if fz
-%     [obj] = update_XY(obj);
-%     for ix = 1:numel(obj.tiles)
-%         %         X = obj.tiles(ix).tform.T(3,1) + obj.tiles(ix).W/2;
-%         %         Y = obj.tiles(ix).tform.T(3,2) + obj.tiles(ix).H/2;
-%         %disp([X Y]);
-%         text(obj.X,obj.Y, num2str(ix), 'BackgroundColor', 'y', 'FontSize', fz);
-%     end
-% end
+% fz = 16;
+if fz
+    [obj] = update_XY(obj);
+    for ix = 1:numel(obj.tiles)
+        
+%                  X = obj.tiles(ix).tform.T(3,1) + obj.tiles(ix).W/2;
+%                  Y = obj.tiles(ix).tform.T(3,2) + obj.tiles(ix).H/2;
+%         disp([X Y]);
+        try
+        text(obj.X(ix),obj.Y(ix), num2str(ix), 'BackgroundColor', 'y', 'FontSize', fz);
+        catch err_display_text
+        end
+    end
+end
 daspect([1 1 1]);
 axis ij;
 % view(90,90);

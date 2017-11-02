@@ -1,4 +1,4 @@
-function [I, J, S, w] = gen_A_b_row_range(fn, degree, np_vec, ...
+function [I, J, S, w, Ib, Sb] = gen_A_b_row_range(fn, degree, np_vec, ...
                      r_sum_vec, rstart, rend)
 % Generate a subset of rows of the matrix A (defined by I J and S) 
 % pm: point-match collection
@@ -91,6 +91,8 @@ w = zeros(n,1);
 I = zeros(n*tdim,1);
 J= zeros(n*tdim,1);
 S = zeros(n*tdim,1);
+Ib = [];
+Sb = [];
 pos = 0;
 
 % generate blocks and paste into A
@@ -257,4 +259,9 @@ for pair_number = rstart:rend%1:size(M,1)           % loop over the pairs
             ];
     end
     pos = pos + tdim*np;
+    %%% handle translation-only case
+    if tdim==2
+        Ib = [Ib;rvec(:)];
+        Sb = [Sb;-(vec1(:)-vec2(:))];
+    end
 end

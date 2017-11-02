@@ -5,7 +5,7 @@ if nargin < 2
     opts.NumRandomSamplingsMethod = 'Desired confidence';
     opts.MaximumRandomSamples = 3000;
     opts.DesiredConfidence = 99.5;
-    opts.PixelDistanceThreshold = 0.01;
+    opts.PixelDistanceThreshold = 1;
 end
 
 verbose = 0;
@@ -17,7 +17,7 @@ warning off all
 %% filter point matches using RANSAC
 geoTransformEst = vision.GeometricTransformEstimator; % defaults to RANSAC
 geoTransformEst.Method = 'Random Sample Consensus (RANSAC)'; %'Least Median of Squares';
-geoTransformEst.Transform = 'Affine'; % Valid values: 'Affine', 'Nonreflective similarity'
+geoTransformEst.Transform = 'Nonreflective similarity';%'Affine'; % Valid values: 'Affine', 
 geoTransformEst.NumRandomSamplingsMethod = opts.NumRandomSamplingsMethod;% 'Desired confidence';
 geoTransformEst.MaximumRandomSamples = opts.MaximumRandomSamples;%3000;
 geoTransformEst.DesiredConfidence = opts.DesiredConfidence; %99.5;
@@ -33,7 +33,7 @@ parfor pmix = 1:size(pm.M, 1)
     m = M(pmix,:);
     m1 = m{1};
     m2 = m{2};
-    warning off all;[tform_matrix, inlierIdx] = step(geoTransformEst, m{2}, m{1});
+    [tform_matrix, inlierIdx] = step(geoTransformEst, m{2}, m{1});
     m1 = m1(inlierIdx,:);
     m2 = m2(inlierIdx,:);
     M(pmix,:) = {m1,m2};

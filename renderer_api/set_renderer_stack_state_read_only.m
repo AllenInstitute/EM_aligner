@@ -17,7 +17,7 @@ end
 % str13 = sprintf('/groups/flyTEM/flyTEM/render/bin/manage-stack.sh ${PROJECT_PARAMS} --action SET_STATE --stackState READ_ONLY --stack ${TARGET_STACK}');
 
 
-str13 = sprintf('%s/manage_stacks.sh --baseDataUrl %s --owner %s --project %s --action SET_STATE --stackState COMPLETE --stack %s', ...
+str13 = sprintf('%s/manage_stacks.sh --baseDataUrl %s --owner %s --project %s --action SET_STATE --stackState READ_ONLY --stack %s', ...
                 rc.renderbinPath, rc.baseURL, rc.owner, rc.project, rc.stack);
 strcmd = [str13];
 
@@ -35,7 +35,7 @@ if strfind(resp, 'caught exception')
 end
 
 
-if verbose,
+if verbose
     disp(strcmd);
     disp(a);
     disp(resp);

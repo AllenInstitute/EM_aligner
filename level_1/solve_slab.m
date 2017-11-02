@@ -2,7 +2,7 @@ function [mL, pm_mx, err, R, L_vec, ntiles, PM, sectionId_load, z_load] = ...
     solve_slab(rc, pm, nfirst, nlast, rctarget, opts)
 % solve a slab (range of z-coordinates) within collection rc using point matches in point-match
 % collection pm.
-% the slab is delimited by nfirst and nlast, which are z-values. 
+% the slab is delimited by nfirst and nlast, which are z-values.
 % For example usage see "test_solve_slab_01.m" under the "test_scripts" folder
 % pm_mx is a point-match count correlation matrix: useful for spotting missing point-matches or
 % excessive cross-layer correlation to generate point matches.
@@ -21,11 +21,11 @@ if ~isfield(opts, 'small_region'), opts.small_region = 10;end
 if ~isfield(opts, 'complete'), opts.complete = 1;end
 if ~isfield(opts, 'disableValidation'), opts.disableValidation = 0;end
 
-if opts.stvec_flag==0 && opts.conn_comp==0, 
+if opts.stvec_flag==0 && opts.conn_comp==0,
     disp('Setting opts.conn_comp to 1, to enable rigid model calculation');
 end
-    
-cs     = nlast-nfirst + 1;   % adjust the chunck size to encompass the whole range, i.e. no chuncks
+[zu, sID, sectionId, z] = get_section_ids(rc, nfirst, nlast);
+cs     = numel(zu);%nlast-nfirst + 1;   % adjust the chunck size to encompass the whole range, i.e. no chuncks
 sh     = 0;     % this is core overlap. Actual overlap is this number + 2;
 
 %% configure solver using defaults if opts is not provided
@@ -61,8 +61,8 @@ chnks(end) = numel(z);
 
 if verbose, disp('Chuncks: ');disp(chnks);end
 
-%% Calculate solution for each chunck. 
-% SOSI ---- This is designed so that in the future each process of chunch 
+%% Calculate solution for each chunck.
+% SOSI ---- This is designed so that in the future each process of chunch
 % solution can be distributed independently
 collection = cell(size(chnks,1),1);
 zfirst = zeros(size(chnks,1),1);
@@ -82,7 +82,7 @@ for ix = 1:size(chnks,1)
         L_vec = add_translation_peggs(L_vec, opts.peg_npoints, opts.peg_weight);
     end
     %L_vec.pm = filter_pm(L_vec.pm);
-    
+
     %     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %     %% The solver can only handle clusters of tiles that are sufficiently connected
     %     %  Orphan tiles are not allowed, nor tiles with too few point matches
@@ -100,7 +100,7 @@ for ix = 1:size(chnks,1)
     %% Solve: Provide the collection of connected components and they will each be individually solved
     if ~isempty(L_vec)
     [mL, err{ix}, R{ix}] = solve_clusters(L_vec, opts, opts.stvec_flag);   % solves individual clusters and reassembles them into one
-    
+
     if opts.use_peg
     %%% if translation pegs were used, eliminate last tile
     mL.tiles(end) = [];
@@ -113,47 +113,12 @@ for ix = 1:size(chnks,1)
     end
     try
     if ~isempty(rctarget)
+        if verbose, disp('Ingesting:'); disp(rctarget);end
         ingest_section_into_renderer_database(mL,rctarget, rc, pwd,...
             opts.translate_to_origin, opts.complete, opts.disableValidation);
-        %ingest_section_into_renderer_database_overwrite(mL, rctarget, rc, pwd, opts.translate_to_origin);
-        if verbose, disp('Ingesting:'); disp(rctarget);end
+
     end
     catch err_ingest
         kk_disp_err(err_ingest);
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

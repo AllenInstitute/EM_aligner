@@ -58,7 +58,7 @@ iU2 = [];
 tB = [];
 td = [];
 %%%%%%%%%% Configuration
-if options.verbose, disp(options);end
+%if options.verbose, disp(options);end
 if isfield(options, 'lambda');
 lambda = options.lambda;
 else

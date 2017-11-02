@@ -5,8 +5,10 @@ function [mA, mS, sctn_map, confidence, tile_areas, tile_perimeters, tidsvec,...
 % Summarizes point-match residuals and tile deformation per tile and section taking
 % into accounts its neighbors.
 % opts fields and their defaults:
+%    residual_info  : 0       0 = don't calclate residuals. then pm is not needed
 %    min_points     : 5
 %    nbrs           : 4
+%    show_deformation_summary: 0;
 %    show_deformation: 1      0 = don'e show
 %                             1 = display visible figure
 %                             2 = save image of invisible figure to disk (not implemented yet)

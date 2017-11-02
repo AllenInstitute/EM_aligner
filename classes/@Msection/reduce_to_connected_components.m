@@ -15,7 +15,7 @@ if nargin<2, mintiles = 1;end
 
 % generate a graph object, based on point-matches
 if isempty(obj.pm.adj)
-    error('Point-match set appears to be empty: try reducing "min_points"');
+    error('Point-match set appears to be empty: check point-match collection or try reducing "min_points"?');
 else
     obj.G = graph(obj.pm.adj(:,1), obj.pm.adj(:,2), obj.pm.np, {obj.tiles(:).renderer_id});
     b = conncomp(obj.G, 'OutputForm', 'vector');  % generate logical clusters (connected components)

@@ -341,9 +341,9 @@ S1 = cell2mat(S(:));clear S;
 disp('..... done!');
 
 %% save intermediate state 
-disp('Saving state...');
-save temp;
-disp('... done!');
+% disp('Saving state...');
+% save temp;
+% disp('... done!');
 
 %% Step 4: Solve
 disp('** STEP 4:   Solving ....'); diary off;diary on;
@@ -353,104 +353,38 @@ b = sparse(size(A,1), 1);
 w = cell2mat(w(:));
 Wmx = spdiags(w,0,size(A,1),size(A,1));
 clear w;
-
+tB = 1;
 d = reshape(T', ncoeff,1);clear T;
 
-
 %%%%%%%%%%%%%%%%%%%%%%% generate tB (parameter weights)
-tB = ones(ncoeff,1);
+lambda = ones(ncoeff,1) * opts.lambda;
 %%% adjust the rigidity of translation dof
-tB(1:12:end) = opts.transfac;  % for x
-tB(7:12:end) = opts.transfac;  % for y
-%%% adjust regidity of higher-order parameters along x
-tB(4:12:end) = opts.xfac;
-tB(5:12:end) = opts.xfac;
-tB(6:12:end) = opts.xfac;
-%%% adjust rigidity of higher-order parameters along y
-tB(10:12:end) = opts.yfac;
-tB(11:12:end) = opts.yfac;
-tB(12:12:end) = opts.yfac;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tB = sparse(1:ncoeff, 1:ncoeff, tB, ncoeff, ncoeff);
-
-
-
-%%%% determine regularization parameter if opts.lambda is a range
-if numel(opts.lambda)>1
-    deformation_indx = [];
-    error = [];
-    perim_o = 2*Width + 2*Height;
-    for lambdaix = 1:numel(opts.lambda)
-        disp(['Solving ' num2str(lambdaix) ' of ' ...
-            num2str(numel(opts.lambda)) ' -- lambda: ' ...
-            num2str(opts.lambda(lambdaix))]);
-        
-        lambda = opts.lambda(lambdaix);
-        K  = A'*Wmx*A + lambda*(tB')*tB;
-        Lm  = A'*Wmx*b + lambda*(tB')*d;
-        [x2, R] = solve_AxB(K,Lm, opts, d);
-        err = norm(A*x2-b); disp(['Error norm(Ax-b): ' num2str(err)]);
-        Error(lambdaix) = err;
-        Tout = reshape(x2, tdim, ncoeff/tdim)';% remember, the transformations
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% step 4': calculate deformation
-        % make four corners for this tile
-        x = 0;
-        y = 0;
-        Px = [x; x + Width; x + Width; x];
-        Py = [y; y    ; y + Height; Height];
-        
-        parfor jix = 1:size(Tout,1)
-            
-            %%% transform points
-            if opts.degree==1
-                T = [reshape(Tout(jix,:),3,2)];
-                T(3,3) = 1;
-                P = [Px(:) Py(:) [1 1 1 1]']*T;
-            else
-                disp(' degree larger than 1 (affine) not implemented yet for fast method');
-            end
-            % check polygon area
-            Ar(jix) = polyarea(P(:,1), P(:,2));
-            Aratio(jix) = Ar(jix)/(Height * Width);
-            %%% polygonperimeter
-            s = 0;
-            s = s + sqrt((P(1,1)-P(2,1)).^2 + (P(1,2)-P(2,2)).^2);
-            s = s + sqrt((P(2,1)-P(3,1)).^2 + (P(2,2)-P(3,2)).^2);
-            s = s + sqrt((P(3,1)-P(4,1)).^2 + (P(3,2)-P(4,2)).^2);
-            s = s + sqrt((P(1,1)-P(4,1)).^2 + (P(1,2)-P(4,2)).^2);
-            S(jix) = s;
-        end
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
-        %     sig = std(S);
-        %     mu = mean(S);
-        %     fac = 3;
-        %     indx = [find(Aratio<(mu-fac*sig)) find(Aratio>(mu+fac*sig))];
-        %     Aratio(indx) = [];
-        deformation_indx(lambdaix) = mean(abs(S-perim_o));
-    end
-    deformation_indx = deformation_indx/max(deformation_indx);
-    Error = Error/max(Error);
-    
-    diffd = gradient(deformation_indx);
-    yyaxis left
-    plot(log(opts.lambda), diffd, 'go');title('Gradient of deformation');
-    hold on;
-    plot(log(opts.lambda), diffd, 'b-');
-    yyaxis right
-    plot(log(opts.lambda), Error, 'go');title('normalized error and normalized deformation');
-    hold on;
-    plot(log(opts.lambda), Error, 'k-');
-    figure;
-    plot(log(opts.lambda), deformation_indx, 'r-');
-    
-    %%% decide on lambda and proceed
-    lambda = opts.lambda(find(diffd == max(diffd)));
-else
-    lambda = opts.lambda;
+lambda(1:12:end) = opts.transfac;  % for x
+lambda(7:12:end) = opts.transfac;  % for y
+%%% adjust regidity of low-order parameters along x
+if isfield(opts, 'xlambdafac')
+lambda(2:12:end) = opts.xlambdafac;
+lambda(3:12:end) = opts.xlambdafac;
 end
-disp('--------- using lambda:');
-disp(lambda);
-disp('-----------------------');
+%%% adjust regidity of low-order parameters along y
+if isfield(opts, 'ylambdafac')
+lambda(8:12:end) = opts.ylambdafac;
+lambda(9:12:end) = opts.ylambdafac;
+end
+%%% adjust regidity of higher-order parameters along x
+if isfield(opts, 'xfac')
+lambda(4:12:end) = opts.xfac;
+lambda(5:12:end) = opts.xfac;
+lambda(6:12:end) = opts.xfac;
+end
+%%% adjust rigidity of higher-order parameters along y
+if isfield(opts, 'yfac')
+lambda(10:12:end) = opts.yfac;
+lambda(11:12:end) = opts.yfac;
+lambda(12:12:end) = opts.yfac;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 %%% for second order polynomial translate smallest x and smallest y in d to zero
@@ -520,6 +454,8 @@ if ~isempty(rcout)
     disp(' .... completing stack...');
     resp = set_renderer_stack_state_complete(rcout);
 end
+disp('Ingested:');
+disp(rcout);
 disp('.... done!');
 diary off;
 

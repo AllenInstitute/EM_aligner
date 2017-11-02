@@ -1,4 +1,4 @@
-function resp = delete_renderer_tile(rc, tileIDs)
+function resp = delete_renderer_tile(rc, tileIDs, set_to_complete)
 % remove tileIDs from stack
 % tileIDs is an array of the tileIDs to be deleted
 % rc is a struct with fields (baseURL, owner, project, stack)
@@ -11,7 +11,9 @@ function resp = delete_renderer_tile(rc, tileIDs)
 if ~(iscellstr(tileIDs) || iscell(tileIDs))
     tileIDs = cellstr(tileIDs);
 end
-
+if nargin<3
+    set_to_complete = 1;
+end
 verbose = 0;
 check_input(rc);
 
@@ -32,10 +34,14 @@ check_input(rc);
 % set_renderer_stack_state_complete(rc);
 
 % Use curl
-set_renderer_stack_state_loading(rc);
+was_complete = false;
+if stack_complete(rc)
+    was_complete = true;
+    set_renderer_stack_state_loading(rc);
+end
 number_of_tiles_to_delete = numel(tileIDs);
 resp=cell(number_of_tiles_to_delete,1);
-parfor idx = 1:number_of_tiles_to_delete
+for idx = 1:number_of_tiles_to_delete
     urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/tile/%s',...
         rc.baseURL, rc.owner, rc.project, rc.stack,tileIDs{idx});
 
@@ -50,15 +56,17 @@ parfor idx = 1:number_of_tiles_to_delete
     
     if strfind(resp{idx}, 'caught exception')
         disp(resp{idx});
-        error('delete_renderer_tile: server-side error reported');
+        warning('delete_renderer_tile: server-side error reported --- tile not found in this collection?');
     end
     
-    if verbose,
+    if verbose
         disp(status);
         disp(resp{idx});
     end
 end
-set_renderer_stack_state_complete(rc);
+if set_to_complete
+    set_renderer_stack_state_complete(rc);
+end
 %%
 function check_input(rc)
 if ~isfield(rc, 'baseURL'), disp_usage; error('baseURL not provided');end

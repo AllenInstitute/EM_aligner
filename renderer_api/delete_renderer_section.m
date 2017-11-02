@@ -1,10 +1,11 @@
-function resp = delete_renderer_section(rc, z)
+function resp = delete_renderer_section(rc, z, complete)
 % remove section if it already exists
 % z is the z-value of the section
 % rc is a struct with fields (baseURL, owner, project, stack)
 %
 % Author: Khaled Khairy
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if nargin<3, complete = 0; end
 verbose = 0;
 check_input(rc);
 % default the renderer binary to Janelia's setup
@@ -12,8 +13,9 @@ if ~isfield(rc, 'renderbinPath')
     rc.renderbinPath = '/groups/flyTEM/flyTEM/render/bin';
 end
 
+if stack_read_only(rc), error('Cannot modify READ ONLY stack'); end
 
-set_renderer_stack_state_loading(rc);
+if stack_complete(rc), set_renderer_stack_state_loading(rc); end
 
 str1 = sprintf('PROJECT_PARAMS="--baseDataUrl %s --owner %s --project %s";', rc.baseURL, rc.owner, rc.project);
 str2 = sprintf('TARGET_STACK="%s";', rc.stack);
@@ -37,8 +39,8 @@ if verbose,
     disp(a);
     disp(resp);
 end
+if complete, set_renderer_stack_state_complete(rc); end
 
-set_renderer_stack_state_complete(rc);
 %%
 function check_input(rc)
 if ~isfield(rc, 'baseURL'), disp_usage; error('baseURL not provided');end

@@ -1,0 +1,70 @@
+{
+    "__comments": {
+        "comment_0": "IMPORTANT: Before running check: source_collection, target_collection ...",
+        "comment_1": "... target_point_match_collection, scratch and section_number",
+        "comment_2": "Parameters to tweak I : solver_options.scale, solver_options.lambda",
+        "comment_3": "Parameters to tweak II: solver_options.min_points, solver_options.max_points",
+        "comment_4": " common values: solver_options.scale 0.3-0.5, solver_options.lambda = 0.0001 - 100",
+        "comment_5": " common values: solver_options.min_points = 3, solver_options.max_points = 100"
+    },
+	"solver_options": {
+		"min_tiles": 3,
+		"degree": 1,
+		"outlier_lambda": 1000,
+		"solver": "backslash",
+		"min_points": 10,
+        "max_points": 50,
+		"nbrs": 0,
+		"xs_weight": 0.05,
+		"stvec_flag": 0,
+		"conn_comp": 1,
+		"distributed": 0,
+		"lambda": 0.1,
+		"edge_lambda": 0.1,
+		"small_region_lambda": 10,
+		"small_region": 5,
+		"calc_confidence": 1,
+		"translation_fac": 1,
+        "dthresh_factor": 1.2,
+        "scale": 0.5,
+        "use_peg": 1,
+        "peg_weight": 0.0001,
+        "peg_npoints": 5
+	},
+    "SURF_options": {
+		"SURF_NumOctaves": 2,
+		"SURF_NumScaleLevels": 3,
+        "SURF_MetricThreshold": 1000,
+        "SURF_MaxFeatures": 100
+	},
+	"source_collection": {
+		"stack": "v1_acquire",
+		"owner": "flyTEM",
+		"project": "spc",
+		"service_host": "10.40.3.162:8080",
+		"baseURL": "http://10.40.3.162:8080/render-ws/v1",
+		"verbose": 1
+	},
+	"target_collection": {
+		"stack": "v1_montage_SURF_kk04_P2",
+		"owner": "flyTEM",
+		"project": "spc",
+		"service_host": "10.40.3.162:8080",
+		"baseURL": "http://10.40.3.162:8080/render-ws/v1",
+		"verbose": 1,
+        "versionNotes": "experiments to find optimal parameters for Allen dataset"
+	},
+	"target_point_match_collection": {
+		"server": "http://10.40.3.162:8080/render-ws/v1",
+		"owner": "flyTEM",
+		"match_collection": "spc_test"
+	},
+	"section_number": 3357,
+    "image_filter": "true",
+    "scratch": "/gpfs1/scratch/spc/matlab_work/montage/scratch",
+    "renderer_client": "/groups/flyTEM/flyTEM/render/bin/render.sh",
+	"verbose": 2,
+    "ncpus": 8,
+    "complete": 0
+
+}

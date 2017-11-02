@@ -1,8 +1,8 @@
 function [mL, tpr, resout, tile_err] = tile_based_point_pair_errors(mL, A, xout, j, minconf, maxconf)
+%
+[netix] = get_edge_tiles(mL);
 % generate point-pair residual information per tile
 res = A*xout;
-resx = zeros(size(res,1)/2,1);
-resy = zeros(size(res,1)/2,1);
 tpr = cell(numel(mL.tiles),1);
 resout = [];
 % initialize
@@ -37,6 +37,9 @@ for ix = 1:numel(mL.tiles)
         mL.tiles(ix).confidence = [-50 -50];
         tile_err(ix,:) = [-999 -999];%full(sum(tpr{ix},1)/size(tpr{ix},1));
         delix = [delix;ix];
+        elseif netix(ix)==1
+            tile_err(ix,:) = [nan nan];
+            delix = [delix;ix];
         else
         
         tile_err(ix,:) = full(sum(tpr{ix},1)/size(tpr{ix},1));

@@ -1,4 +1,6 @@
-function [L, L_vec, pm_mx, err, scl, h, toc_load_pm, toc_rigid] = solver_regularization_parameter_sweep(nfirst, nlast, rcsource, pm, opts, regstart, regfinish, step)
+function [L, L_vec, pm_mx, err, scl, h, toc_load_pm, toc_rigid] = ...
+    solver_regularization_parameter_sweep(...
+    nfirst, nlast, rcsource, pm, opts, regstart, regfinish, step)
 % Performs a regularization parameter sweep between regstart and regfinish (inclusive)
 % Test for best regularization parameter graphically
 % This is the smallest parameter value that does not cause downscaling of tiles

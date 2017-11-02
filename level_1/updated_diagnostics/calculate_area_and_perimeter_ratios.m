@@ -5,8 +5,12 @@ function [output_struct, varargout] = calculate_area_and_perimeter_ratios( rcsou
 % options fields and their defaults:
 %    outlier_deviation_for_ratios     : 0.04 , Deviation of tile area or perimeter beyond 
 %                                              which it is considered an outlier (eg., the tile can
-%                                              vary by +/- 4% when outlier_deviation_for_ratios = 0.04)
+%                                              vary by +/- 4% when outlier_deviation_for_ratios = 0.04). 
+%                                              If an array of two values is provided, then the first and
+%                                              second values are taken to be the lower and upper cutoff
+%                                              ratios, respectively.
 %    output_data_per_tile             : true , Output values and ratios for each tile
+%    verbose                          : true , Output status
 % Output:
 %    output_struct:           Contains, for both area and perimeter: 
 %                             all tile values, all tile ratios, median ratios per section, number of
@@ -26,53 +30,75 @@ end
 
 if ~isfield(options, 'outlier_deviation_for_ratios'), options.outlier_deviation_for_ratios = 0.04; end
 if ~isfield(options,'output_data_per_tile'), options.output_data_per_tile = true; end
+if ~isfield(options, 'verbose'), options.verbose = true; end
 
 % Get the unique_z values and the section ids grouped by their z
-[unique_z, section_ids_grouped_by_z, ~, ~, ~] = get_section_ids(rc, zstart, zend);
+[unique_z, section_ids_grouped_by_z, ~, ~, ~] = get_section_ids(rc, zstart, zend+1);
+z_too_large = (unique_z>=zend+1);
+unique_z(z_too_large) = [];
+section_ids_grouped_by_z(z_too_large) = [];
+
+[unique_z_source, ~, ~, ~, ~] = get_section_ids(rcsource, zstart, zend+1);
+z_too_large = (unique_z_source>=zend+1);
+unique_z_source(z_too_large) = [];
+
 % Initialize variables to store deformation for all sections
-numel_unique_z = numel(unique_z);
-all_rc_section_map  = cell(numel_unique_z,1);
+floor_unique_z = floor(unique_z);
+unique_merged_z = unique(floor_unique_z);
+floor_unique_z_source = floor(unique_z_source);
+
+numel_unique_merged_z = numel(unique_merged_z);
+all_rc_section_map  = cell(numel_unique_merged_z,1);
 
 if options.output_data_per_tile
-    all_rc_areas = cell(numel_unique_z,1);
-    all_rc_area_ratios = cell(numel_unique_z,1);
-    all_rc_perimeters = cell(numel_unique_z,1);
-    all_rc_perimeter_ratios = cell(numel_unique_z,1);
+    all_rc_areas = cell(numel_unique_merged_z,1);
+    all_rc_area_ratios = cell(numel_unique_merged_z,1);
+    all_rc_perimeters = cell(numel_unique_merged_z,1);
+    all_rc_perimeter_ratios = cell(numel_unique_merged_z,1);
 end
 
-all_rc_area_ratio_median = zeros(numel_unique_z,1);
-all_rc_area_ratio_mean = zeros(numel_unique_z,1);
-all_rc_area_ratio_variance = zeros(numel_unique_z,1);
-all_rc_area_ratio_outliers_count = zeros(numel_unique_z,1);
-all_rc_area_ratio_outliers_percent = zeros(numel_unique_z,1);
-all_rc_area_ratio_outliers_indices = cell(numel_unique_z,1);
-all_rc_area_ratio_outliers_tile_ids = cell(numel_unique_z,1);
+all_rc_area_ratio_median = zeros(numel_unique_merged_z,1);
+all_rc_area_ratio_mean = zeros(numel_unique_merged_z,1);
+all_rc_area_ratio_variance = zeros(numel_unique_merged_z,1);
+all_rc_area_ratio_outliers_count = zeros(numel_unique_merged_z,1);
+all_rc_area_ratio_outliers_percent = zeros(numel_unique_merged_z,1);
+all_rc_area_ratio_outliers_indices = cell(numel_unique_merged_z,1);
+all_rc_area_ratio_outliers_tile_ids = cell(numel_unique_merged_z,1);
 
-all_rc_perimeter_ratio_median = zeros(numel_unique_z,1);
-all_rc_perimeter_ratio_mean = zeros(numel_unique_z,1);
-all_rc_perimeter_ratio_variance = zeros(numel_unique_z,1);
-all_rc_perimeter_ratio_outliers_count = zeros(numel_unique_z,1);
-all_rc_perimeter_ratio_outliers_percent = zeros(numel_unique_z,1);
-all_rc_perimeter_ratio_outliers_indices = cell(numel_unique_z,1);
-all_rc_perimeter_ratio_outliers_tile_ids = cell(numel_unique_z,1);
+all_rc_perimeter_ratio_median = zeros(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_mean = zeros(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_variance = zeros(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_outliers_count = zeros(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_outliers_percent = zeros(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_outliers_indices = cell(numel_unique_merged_z,1);
+all_rc_perimeter_ratio_outliers_tile_ids = cell(numel_unique_merged_z,1);
 % to generate histogram counts we need to define bin edges
 edges = [0:.02:10];
 counts = zeros(numel(unique_z), numel(edges));
 webopts = weboptions('Timeout', 60);
 
 % Loop over all unique z and print out progress
-fprintf('Area And Perimeter Ratio Progress:');
-fprintf(['\n' repmat('.',1,numel(unique_z)) '\n\n']);
-parfor z_index = 1:numel(unique_z)
+if options.verbose
+    fprintf('Area And Perimeter Ratio Progress:');
+    fprintf(['\n' repmat('.',1,numel(unique_z)) '\n\n']);
+end
+parfor z_index = 1:numel(unique_merged_z)
     % call the Renderer API to fetch tile information from rc and rcsource
-    urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/z/%.1f/tile-specs', ...
-        rc.baseURL, rc.owner, rc.project, rc.stack,unique_z(z_index) );
-    rc_data = webread(urlChar, webopts);
+    split_zs = unique_z(floor_unique_z == unique_merged_z(z_index));
+    rc_data = [];
+    for split_z_index = 1:numel(split_zs)
+        urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/z/%.1f/tile-specs', ...
+            rc.baseURL, rc.owner, rc.project, rc.stack,split_zs(split_z_index) );
+        rc_data = [rc_data; webread(urlChar, webopts)];
+    end
     
-    urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/z/%.1f/tile-specs', ...
-        rcsource.baseURL, rcsource.owner, rcsource.project, rcsource.stack,unique_z(z_index) );
-    rcsource_data = webread(urlChar, webopts);
-    
+    split_zs = unique_z_source(floor_unique_z_source == unique_merged_z(z_index));
+    rcsource_data =[];
+    for split_z_index = 1:numel(split_zs)
+        urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/z/%.1f/tile-specs', ...
+            rcsource.baseURL, rcsource.owner, rcsource.project, rcsource.stack,split_zs(split_z_index) );
+        rcsource_data = [rcsource_data; webread(urlChar, webopts)];
+    end
     % Make sure the correct corresponding tiles are used in rc_data and rcsource_data
     [is_rc_tile_in_rcsource, rcsource_tile_indices] = ismember({rc_data(:).tileId}, {rcsource_data(:).tileId});
     rc_data(rcsource_tile_indices==0)=[];
@@ -130,7 +156,7 @@ parfor z_index = 1:numel(unique_z)
     [all_rc_perimeter_ratio_median(z_index), all_rc_perimeter_ratio_mean(z_index), all_rc_perimeter_ratio_variance(z_index), all_rc_perimeter_ratio_outliers_count(z_index), all_rc_perimeter_ratio_outliers_percent(z_index), all_rc_perimeter_ratio_outliers_indices{z_index}, all_rc_perimeter_ratio_outliers_tile_ids{z_index}] = ...
         calculate_statistics_and_outliers( rc_perimeter_ratios, options.outlier_deviation_for_ratios, rc_ids, 'fixed_cutoff');
     all_rc_section_map{z_index} = rc_positions_transformed; 
-    fprintf('\b|\n');
+    if options.verbose, fprintf('\b|\n'); end
 end
 
 % Create the output struct and optional outputs

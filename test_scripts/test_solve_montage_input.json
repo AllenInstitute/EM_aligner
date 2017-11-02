@@ -16,7 +16,7 @@
 		"calc_confidence": 1,
 		"translation_fac": 1,
         "use_peg": 1,
-        "peg_weight": 0.0001,
+        "peg_weight": 0.00001,
         "peg_npoints": 5
 	},
 	"source_collection": {
@@ -30,20 +30,20 @@
 	"source_point_match_collection": {
 		"server": "http://10.40.3.162:8080/render-ws/v1",
 		"owner": "flyTEM",
-		"match_collection": "v12_dmesh"
+		"match_collection": "FAFB_pm_4"
 	},
 	"target_collection": {
-		"stack": "EXP_test_montage_solver_1",
+		"stack": "Revised_montage_kk_08",
 		"owner": "flyTEM",
-		"project": "test",
+		"project": "FAFBv14_kk",
 		"service_host": "10.37.5.60:8080",
 		"baseURL": "http://10.37.5.60:8080/render-ws/v1",
 		"verbose": 1,
         "initialize": 1,
         "complete": 1
 	},
-	"z_value": 1,
-    "filter_point_matches": 0,
+	"z_value": 3899,
+    "filter_point_matches": 1,
     "temp_dir":"/scratch/khairyk",
 	"verbose": 1
 }

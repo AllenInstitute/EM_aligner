@@ -7,17 +7,19 @@ options.number_of_cross_sections = 2;
 options.show_residuals = false; % Show_residuals and show_deformations are for plotting section maps
 options.show_deformations = false;
 options.show_table = false; % Whether or not to show the table
-options.output_data_per_tile = false; % Store all the data per tile (eg. residuals, area, area ratio etc) or not
+options.output_data_per_tile = true; % Store all the data per tile (eg. residuals, area, area ratio etc) or not
 options.outlier_deviation_for_residuals = 10; % Cutoff average residual for tile, beyond which it is considered to be an outlier
 options.outlier_deviation_for_ratios = 0.10; % Cutoff for area ratio and perimeter ratio outliers: any tile ratios that stray by more than outlier_deviation_for_ratios*100% are outliers
 
 % Source, used for area and perimeter ratios, empty if don't want area and
 % perimeter calculations
-rcsource.baseURL = 'http://em-131fs:8998/render-ws/v1';
+
+rcsource.baseURL = 'http://em-131fs:8080/render-ws/v1';
 rcsource.owner = 'gayathri';
 rcsource.project = 'MM2';
 rcsource.stack = 'mm2_acquire_8bit';
 rcsource = [];
+
 
 % Original, unbeautified stack
 rc_original.baseURL = 'http://em-131fs:8998/render-ws/v1';
@@ -46,8 +48,8 @@ pm(2).match_collection = 'Beautification_cross_sift_00';
 
 % If options is empty, defaults are used. If rcsource is empty, Area and
 % Periemter ratios are not calculated, unless show_deformations is true
-original_output_struct = updated_gen_diagnostics(rcsource, rc_original, zstart, zend, pm);
-beautified_output_struct = updated_gen_diagnostics(rcsource, rc_beautified, zstart, zend, pm, options);
+original_output_struct = updated_gen_diagnostics(rcsource, rc_original, pm, zstart, zend);
+beautified_output_struct = updated_gen_diagnostics(rcsource, rc_beautified, pm, zstart, zend, options);
 
 %% Plot the matrices and ratio of the two
 
@@ -87,7 +89,7 @@ increased_residuals_color = ones(length(red_and_blue_color),3);
 increased_residuals_color(:,[1,3]) = [red_and_blue_color', red_and_blue_color'];
 red_color = flip((256:-1:index_of_unity_ratio)-index_of_unity_ratio)/(256-index_of_unity_ratio);
 decreased_residuals_color = zeros(length(red_color),3);
-decreased_residuals_color(:,1) = red_color; 
+decreased_residuals_color(:,1) = red_color;
 combined_color_map = [increased_residuals_color; decreased_residuals_color];
 % combined_color_map = zeros(256,3);
 % combined_color_map(end-(length(red_color)-1):end,1) = red_color;
@@ -99,4 +101,3 @@ set(gca,'YTick',(1:label_spacing:length(all_z)),'YTickLabel',all_z(1:label_spaci
 c=colorbar();
 ylabel(c,'Ratio')
 set(c,'YTick',sort([(0:.25:1),(1-min_residuals_ratio)/(max_residuals_ratio-min_residuals_ratio)]),'YTickLabel',sort([(min_residuals_ratio:(max_residuals_ratio-min_residuals_ratio)/4:max_residuals_ratio),1]));
-

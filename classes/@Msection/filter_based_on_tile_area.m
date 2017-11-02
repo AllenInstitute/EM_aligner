@@ -16,7 +16,7 @@ if nargin<2
 elseif isstruct(lambda)
     lambda = lambda.lambda;
 end
-disp(['filtering outliers based on perimeter using lambda = ' num2str(lambda)]);
+%disp(['filtering outliers based on perimeter using lambda = ' num2str(lambda)]);
 A = [];
 S = [];
 obj = update_tile_info(obj);		% we don't need adjacency information in this file, but make sure tile info is up to date
@@ -67,12 +67,13 @@ end
 %[mu,sig] = normfit(S); % estimates mean and standard deviation
 
 sig = std(S);
-mu = mean(S);
+mu = median(S);
 
 
 indx = [find(S<(mu-lambda*sig)) find(S>(mu+lambda*sig))];
+indx = [indx find(A<(median(A)-lambda*std(A))) find(A>(median(A)+lambda*std(A)))];
 for ix = 1:numel(indx)
-    disp(['Outlier tile found: ' num2str(indx(ix)) ' .... setting state to -3.']);
+    %disp(['Outlier tile found: ' num2str(indx(ix)) ' .... setting state to -3.']);
     
     obj.tiles(indx(ix)).state = -3;
 end

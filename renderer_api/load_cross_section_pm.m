@@ -1,6 +1,7 @@
 function [M, adj, W, np, xnp] = load_cross_section_pm(pm, sID1, ...
                                sID2, map_id, min_points, max_points,...
-                               wopts, fac, npoints_relative_weighting)
+                               wopts, factors, npoints_relative_weighting,...
+                               outside_group)
 % returns point-matches (from pm) between two sections with sID1 and sID2.
 % sID1 and SID2 are cell arrays (usually with only one member) of section ids.
 % When more than one cell is present, it means that we have re-acquires with the same z value
@@ -14,17 +15,21 @@ function [M, adj, W, np, xnp] = load_cross_section_pm(pm, sID1, ...
 % npoints_relative_weighting is a flag: 0 = no weighting by point-match number for this pair
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if nargin<9, npoints_relative_weighting = 0;end
+if nargin<10, outside_group = false; end
 M = [];
 adj = [];
 W = [];
 np = [];
 xnp = 0;
 count = 1;
+if ~outside_group, fac = factors; end
 for six1 = 1:numel(sID1)                % loop over "re-acquires" if present. Usually numel(sID1) is equal to 1
     for six2 = 1:numel(sID2)            % loop over "re-acquires" if present. Usually numel(sID2) is equal to 1
-        
-        j = get_pms_cross_layer(pm, sID2{six2}, sID1{six1}, wopts);
-
+        if outside_group
+            j = get_pms_cross_layer(pm, sID1{1}, sID2{end}, wopts, outside_group); %if doing outside group, only need the extremes to load all the necessary point-matches
+        else
+            j = get_pms_cross_layer(pm, sID2{six2}, sID1{six1}, wopts);
+        end
         for jix = 1:numel(j)
             if size(j(jix).matches.p',1)>=min_points
                 % check that point-match is between tiles/canvases that exist in our working set
@@ -33,6 +38,13 @@ for six1 = 1:numel(sID1)                % loop over "re-acquires" if present. Us
                     % obtain map ids
                     midp = map_id(j(jix).pId);
                     midq = map_id(j(jix).qId);
+                    if outside_group
+                        groupIds = {j(jix).pGroupId, j(jix).qGroupId};
+                        groupIdsNum = [str2num(j(jix).pGroupId), str2num(j(jix).qGroupId)];
+                        [~, sorted_ids] = sort(groupIdsNum); %in case it isn't always in order
+                        current_key = [groupIds{sorted_ids(1)} '_' groupIds{sorted_ids(2)}];
+                        fac = factors(current_key);
+                    end
                     if numel(j(jix).matches.p(1,:))>max_points
                         indx = randi(numel(j(jix).matches.p(1,:))-1, max_points,1);
                         if midp<midq
@@ -72,5 +84,6 @@ for six1 = 1:numel(sID1)                % loop over "re-acquires" if present. Us
                 end
             end
         end
+        if outside_group, break; end %Break out of loops since only need to calculate it once if doing outside_group
     end
 end

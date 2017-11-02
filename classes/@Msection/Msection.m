@@ -137,7 +137,14 @@ classdef Msection
                 if nargin==3 && isstruct(arg1)
                     %% in this case we construct a layer by directly reading the relevant z tile information from the layout file
                     obj = get_slab_tiles(arg1, arg2, arg3);
-                    if ~isempty(obj.tiles), obj = update_tile_info(obj);end
+                    for tix = 1:numel(obj.tiles)
+                        obj.tiles(tix).project = arg1.project;
+                        obj.tiles(tix).owner = arg1.owner;
+                        obj.tiles(tix).stack = arg1.stack;
+                    end
+                    if ~isempty(obj.tiles)
+                        obj = update_tile_info(obj);
+                    end
                 end
             end
             

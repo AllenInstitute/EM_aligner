@@ -13,11 +13,19 @@ function resp_append = ingest_section_into_renderer_database(mL,rc_target,...
 if nargin<6, complete = 1;end
 if nargin<5, translate_to_positive_space = 1;end
 if nargin<7, disableValidation = 0;end
+try_checking_if_stack_exists = 0;
+while ~stack_exists(rc_base) && try_checking_if_stack_exists<120
+    pause(5);
+    try_checking_if_stack_exists=try_checking_if_stack_exists+1;
+end
 if ~stack_exists(rc_base), error('base collection not found');end
 
 if ~stack_exists(rc_target)
     disp('Target collection not found, creating new collection in state: ''Loading''');
     resp = create_renderer_stack(rc_target);
+end
+if stack_read_only(rc_target)
+    error('Cannot modify READ ONLY stack.... aborting');
 end
 if stack_complete(rc_target)
     %disp('Cannot append COMPLETE stack: setting state to LOADING');
@@ -27,7 +35,7 @@ end
 
 try
     if translate_to_positive_space
-        disp('Translating to +ve space');
+        %disp('Translating to +ve space');
         %disp('translating to set in +ve space');
         mL = translate_to_origin(mL);
     end
@@ -35,7 +43,8 @@ catch err
     disp('Failed to translate to +ve space');
 end
 %% export to MET (in preparation to be ingested into the Renderer database
-fn = [dir_work '/X_A_' num2str(randi(100000000)) '.txt'];
+% fn = [dir_work '/X_A_' num2str(randi(100000000)) '.txt'];
+fn = [dir_work '/X_A_' num2str(mL.z) '_' generate_uuid '.txt'];
 %disp('Exporting temporary MET file');
 if strcmp(class(mL.tiles(1).tform), 'images.geotrans.PolynomialTransformation2D')
     export_montage_MET_poly(mL, fn);

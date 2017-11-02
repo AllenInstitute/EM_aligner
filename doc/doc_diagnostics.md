@@ -1,7 +1,13 @@
-##Prerequisites
+## Prerequisites
 We are assuming that the Renderer and point-match services (and associated database) are set up and accessible for example at http://tem-services.int.janelia.org.
 Also, you are using Matlab 2016b and above with toolboxes: Computer Vision Systems (or Video and Blockset), ImageProcessing, Statistics, (optional) Matlab compiler and (optional) Parallel computing. The latest EM_aligner directory and subdirectories are on your Matlab path.
 
+
+
+
+## use updated_diagnostics (recommended)
+Calling updated_gen_diagnostics(rcsource, rc, zstart, zend, point_matches, options) will produce an output struct that has information about areas, perimeters and residuals that can be useful for diagnosing issues in sections. 
+[Consult pdf file for more information] (UpdatedDiagnosticsTools.pdf).
 
 ## generate general diagnostics about tile deformation and point-match residuals
 

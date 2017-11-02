@@ -14,4 +14,4 @@ end
 
 %%
 solve_montage_SL(fn);
-view_collection_dashboard(sl.target_collection);
+%view_collection_dashboard(sl.target_collection);

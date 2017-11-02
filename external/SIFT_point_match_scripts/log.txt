@@ -1,0 +1,102 @@
+
+  Running: /misc/local/jdk1.8.0_71/bin/java -cp /groups/flyTEM/flyTEM/render/lib/current-ws-standalone.jar -Xms6G -Xmx6G -Djava.awt.headless=true -XX:+UseSerialGC org.janelia.render.client.CopyStackClient --baseDataUrl http://tem-services:8080/render-ws/v1 --owner flyTEM --project FAFB00 --fromStack v12_acquire_merged --toOwner flyTEM --toProject khairyk_stage --toStack z_1949_1957_acquire --replaceLastTransformWithStage --splitMergedSections --completeToStackAfterCopy --z 1949 --z 1950 --z 1951 --z 1952 --z 1953 --z 1954 --z 1955 --z 1956 --z 1957
+
+
+20:43:13.750 [main] INFO  [org.janelia.render.client.ClientRunner] run: entry
+20:43:14.075 [main] INFO  [org.janelia.render.client.CopyStackClient] runClient: entry, parameters={
+  "baseDataUrl" : "http://tem-services:8080/render-ws/v1",
+  "owner" : "flyTEM",
+  "project" : "FAFB00",
+  "fromStack" : "v12_acquire_merged",
+  "toOwner" : "flyTEM",
+  "toProject" : "khairyk_stage",
+  "toStack" : "z_1949_1957_acquire",
+  "zValues" : [ 1949.0, 1950.0, 1951.0, 1952.0, 1953.0, 1954.0, 1955.0, 1956.0, 1957.0 ],
+  "keepExisting" : false,
+  "completeToStackAfterCopy" : true,
+  "replaceLastTransformWithStage" : true,
+  "splitMergedSections" : true
+}
+20:43:14.605 [main] INFO  [org.janelia.render.client.RenderDataClient] getStackSectionData: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/sectionData
+20:43:15.028 [main] INFO  [org.janelia.render.client.CopyStackClient] getSectionIdToIntegralZMap: exit, mapped 7352 sections to z values 100000 - 107351
+20:43:15.030 [main] INFO  [org.janelia.render.client.RenderDataClient] getStackMetaData: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire
+20:43:15.069 [main] INFO  [org.janelia.render.client.CopyStackClient] z_1949_1957_acquire stack state is COMPLETE, will try to set it back to LOADING ...
+20:43:15.070 [main] INFO  [org.janelia.render.client.RenderDataClient] setStackState: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/state/LOADING
+20:43:15.076 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1949.0/resolvedTiles
+20:43:20.541 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 274 out of 2856 tiles
+20:43:25.549 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 764 out of 2856 tiles
+20:43:30.552 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1441 out of 2856 tiles
+20:43:35.555 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2229 out of 2856 tiles
+20:43:39.514 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2856 tiles
+20:43:39.518 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2856 tiles
+20:43:39.520 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102019.0
+20:43:40.008 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2856 tiles
+20:43:40.937 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1950.0/resolvedTiles
+20:43:46.062 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 753 out of 1810 tiles
+20:43:51.066 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1505 out of 1810 tiles
+20:43:53.062 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 1810 tiles
+20:43:53.064 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 1810 tiles
+20:43:53.065 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102020.0
+20:43:53.252 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102021.0
+20:43:53.312 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 1810 tiles
+20:43:53.911 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1951.0/resolvedTiles
+20:43:59.089 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 755 out of 2816 tiles
+20:44:04.095 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1509 out of 2816 tiles
+20:44:09.101 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2298 out of 2816 tiles
+20:44:12.345 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2816 tiles
+20:44:12.348 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2816 tiles
+20:44:12.349 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102022.0
+20:44:12.710 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2816 tiles
+20:44:13.643 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1952.0/resolvedTiles
+20:44:18.843 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 750 out of 2872 tiles
+20:44:23.848 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1520 out of 2872 tiles
+20:44:28.850 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2315 out of 2872 tiles
+20:44:32.337 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2872 tiles
+20:44:32.340 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2872 tiles
+20:44:32.341 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102023.0
+20:44:32.728 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2872 tiles
+20:44:33.685 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1953.0/resolvedTiles
+20:44:38.840 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 758 out of 2528 tiles
+20:44:43.842 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1526 out of 2528 tiles
+20:44:48.846 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2322 out of 2528 tiles
+20:44:50.137 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2528 tiles
+20:44:50.139 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2528 tiles
+20:44:50.140 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102024.0
+20:44:50.456 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2528 tiles
+20:44:51.291 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1954.0/resolvedTiles
+20:44:56.461 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 754 out of 2876 tiles
+20:45:01.467 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1515 out of 2876 tiles
+20:45:06.468 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2271 out of 2876 tiles
+20:45:10.438 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2876 tiles
+20:45:10.441 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2876 tiles
+20:45:10.442 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102025.0
+20:45:10.802 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2876 tiles
+20:45:11.750 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1955.0/resolvedTiles
+20:45:16.916 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 765 out of 2816 tiles
+20:45:21.921 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1539 out of 2816 tiles
+20:45:26.927 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2310 out of 2816 tiles
+20:45:30.203 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2816 tiles
+20:45:30.206 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2816 tiles
+20:45:30.207 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102026.0
+20:45:31.317 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2816 tiles
+20:45:32.702 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1956.0/resolvedTiles
+20:45:37.889 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 773 out of 3143 tiles
+20:45:42.893 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1541 out of 3143 tiles
+20:45:47.898 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2308 out of 3143 tiles
+20:45:52.899 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 3076 out of 3143 tiles
+20:45:53.323 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 3143 tiles
+20:45:53.325 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 3143 tiles
+20:45:53.326 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102027.0
+20:45:53.444 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102029.0
+20:45:53.529 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102028.0
+20:45:53.734 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 3143 tiles
+20:45:54.771 [main] INFO  [org.janelia.render.client.RenderDataClient] getResolvedTiles: submitting GET http://tem-services:8080/render-ws/v1/owner/flyTEM/project/FAFB00/stack/v12_acquire_merged/z/1957.0/resolvedTiles
+20:45:59.940 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 761 out of 2916 tiles
+20:46:04.942 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 1531 out of 2916 tiles
+20:46:09.947 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: updated transforms for 2299 out of 2916 tiles
+20:46:13.994 [main] INFO  [org.janelia.render.client.CopyStackClient] replaceLastTransformWithStage: exit, updated transforms for 2916 tiles
+20:46:13.997 [main] INFO  [org.janelia.render.client.CopyStackClient] copyLayer: updated z values for 2916 tiles
+20:46:13.998 [main] INFO  [org.janelia.render.client.RenderDataClient] deleteStack: submitting DELETE http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/z/102030.0
+20:46:14.351 [main] INFO  [org.janelia.render.client.RenderDataClient] saveResolvedTiles: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/resolvedTiles for 4 transforms and 2916 tiles
+20:46:15.380 [main] INFO  [org.janelia.render.client.RenderDataClient] setStackState: submitting PUT http://tem-services:8080/render-ws/v1/owner/flyTEM/project/khairyk_stage/stack/z_1949_1957_acquire/state/COMPLETE
+20:46:16.720 [main] INFO  [org.janelia.render.client.ClientRunner] run: exit, processing completed in 0 hours, 3 minutes, 2 seconds

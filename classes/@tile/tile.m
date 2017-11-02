@@ -25,11 +25,15 @@ classdef tile
         rot;
         H = 0;
         W = 0;
+        minX = 0;
+        minY = 0;
+        maxX = 0;
+        maxY = 0;
         state = 1;             % 0 = this tile is marked for removal and should not be rendered (or has invalid transformation information)
         owner = 'gayathri';
         project='EM_Phase1';
         stack = '';
-        server = 'http://10.128.124.14:8998/render-ws/v1'; %'http://tem-services.int.janelia.org:8080/render-ws/v1'; %
+        server = 'http://10.128.124.14:8080/render-ws/v1'; %'http://tem-services.int.janelia.org:8080/render-ws/v1'; %
         features = [];        % store features information
         validPoints = [];     % point locations corresponding to features
         featuresMethod = 'SURF'; % method to be used for calculating features
@@ -61,6 +65,10 @@ classdef tile
                 obj.renderer_id = p.tileId;
                 obj.H = p.height;
                 obj.W = p.width;
+                obj.minX = p.minX;
+                obj.minY = p.minY;
+                obj.maxX = p.maxX;
+                obj.maxY = p.maxY;
                 if isfield(p.layout, 'camera'), obj.cam = str2double(p.layout.camera);end
                 if isfield(p.layout, 'imageCol'),obj.col = p.layout.imageCol;end
                 if isfield(p.layout, 'imageRow'),obj.row = p.layout.imageRow;end
@@ -75,47 +83,84 @@ classdef tile
                 end
                 if strcmp(p.mipmapLevels.x0.imageUrl(1:4), 'file')
                     if isfield(p.mipmapLevels.x0, 'maskUrl'),
-                    obj.mask = p.mipmapLevels.x0.maskUrl(6:end);
+                        obj.mask = p.mipmapLevels.x0.maskUrl(6:end);
                     end
                 end
                 % check if we have a list of transformations, in which case
                 % we need
-%                 if numel(p.transforms.specList)>1,
-%                     p.transforms.specList = p.transforms.specList(end);
-%                 end
 
-                Tstr = p.transforms.specList(end).dataString;
-                Tdouble    = str2double(strsplit(Tstr));
+                %                 if numel(p.transforms.specList)>1,
+                %                     p.transforms.specList = p.transforms.specList(end);
+                %                 end
+                if iscell(p.transforms.specList(1))
+                    Tstr = p.transforms.specList{end}.dataString;
+                    Tdouble    = str2double(strsplit(Tstr));
 
-                if strcmp(p.transforms.specList(end).className, 'mpicbg.trakem2.transform.AffineModel2D')
-                    T(3,3) = 1;
-                    T(1,1) = Tdouble(1);
-                    T(1,2) = Tdouble(2);
-                    T(2,1) = Tdouble(3);
-                    T(2,2) = Tdouble(4);
-                    T(3,1) = Tdouble(5);
-                    T(3,2) = Tdouble(6);
-                    obj.tform.T = T;
-                else
-                    %warning('only affine implemented so far for reading from Renderer: truncating to affine');
-                    if numel(Tdouble)==12 % then we have 2nd order polynpomial
-                    T(3,3) = 1;
-                    T(1,1) = Tdouble(2);
-                    T(1,2) = Tdouble(8);
-                    T(2,1) = Tdouble(3);
-                    T(2,2) = Tdouble(9);
-                    T(3,1) = Tdouble(1);
-                    T(3,2) = Tdouble(7);
-                    elseif numel(Tdouble)==20
-                                           T(3,3) = 1;
-                    T(1,1) = Tdouble(2);
-                    T(1,2) = Tdouble(12);
-                    T(2,1) = Tdouble(3);
-                    T(2,2) = Tdouble(13);
-                    T(3,1) = Tdouble(1);
-                    T(3,2) = Tdouble(11);
+                    if strcmp(p.transforms.specList{end}.className, 'mpicbg.trakem2.transform.AffineModel2D')
+                        T(3,3) = 1;
+                        T(1,1) = Tdouble(1);
+                        T(1,2) = Tdouble(2);
+                        T(2,1) = Tdouble(3);
+                        T(2,2) = Tdouble(4);
+                        T(3,1) = Tdouble(5);
+                        T(3,2) = Tdouble(6);
+                        obj.tform.T = T;
+                    else
+                        %warning('only affine implemented so far for reading from Renderer: truncating to affine');
+                        if numel(Tdouble)==12 % then we have 2nd order polynpomial
+                            T(3,3) = 1;
+                            T(1,1) = Tdouble(2);
+                            T(1,2) = Tdouble(8);
+                            T(2,1) = Tdouble(3);
+                            T(2,2) = Tdouble(9);
+                            T(3,1) = Tdouble(1);
+                            T(3,2) = Tdouble(7);
+                        elseif numel(Tdouble)==20
+                            T(3,3) = 1;
+                            T(1,1) = Tdouble(2);
+                            T(1,2) = Tdouble(12);
+                            T(2,1) = Tdouble(3);
+                            T(2,2) = Tdouble(13);
+                            T(3,1) = Tdouble(1);
+                            T(3,2) = Tdouble(11);
+                        end
+                        obj.tform.T = T;
                     end
-                    obj.tform.T = T;
+                  else
+                    Tstr = p.transforms.specList(end).dataString;
+
+                    Tdouble    = str2double(strsplit(Tstr));
+
+                    if strcmp(p.transforms.specList(end).className, 'mpicbg.trakem2.transform.AffineModel2D')
+                        T(3,3) = 1;
+                        T(1,1) = Tdouble(1);
+                        T(1,2) = Tdouble(2);
+                        T(2,1) = Tdouble(3);
+                        T(2,2) = Tdouble(4);
+                        T(3,1) = Tdouble(5);
+                        T(3,2) = Tdouble(6);
+                        obj.tform.T = T;
+                    else
+                        %warning('only affine implemented so far for reading from Renderer: truncating to affine');
+                        if numel(Tdouble)==12 % then we have 2nd order polynpomial
+                            T(3,3) = 1;
+                            T(1,1) = Tdouble(2);
+                            T(1,2) = Tdouble(8);
+                            T(2,1) = Tdouble(3);
+                            T(2,2) = Tdouble(9);
+                            T(3,1) = Tdouble(1);
+                            T(3,2) = Tdouble(7);
+                        elseif numel(Tdouble)==20
+                            T(3,3) = 1;
+                            T(1,1) = Tdouble(2);
+                            T(1,2) = Tdouble(12);
+                            T(2,1) = Tdouble(3);
+                            T(2,2) = Tdouble(13);
+                            T(3,1) = Tdouble(1);
+                            T(3,2) = Tdouble(11);
+                        end
+                        obj.tform.T = T;
+                    end
                 end
             end
             if nargin>1
@@ -137,10 +182,10 @@ classdef tile
                 obj.temca_conf = -999;
                 obj.rot = 0;
                 if nargin>12
-                obj.temca_conf = temca_conf;
+                    obj.temca_conf = temca_conf;
                 end
                 if nargin>13
-                obj.rot = rotation;
+                    obj.rot = rotation;
                 end
                 if nargin>14
                     obj.renderer_id = renderer_id;
@@ -151,10 +196,10 @@ classdef tile
         %%
         function im = get_mask(obj)
             try
-            im = [];
-            if ~isempty(obj.mask)
-                im = imread(obj.mask);
-            end
+                im = [];
+                if ~isempty(obj.mask)
+                    im = imread(obj.mask);
+                end
             catch err_mask
                 disp('Error retrieving mask');
             end
@@ -184,7 +229,7 @@ classdef tile
             elseif obj.fetch_local==0
                 im = get_image_renderer_client(obj,scale, filter);
             elseif obj.fetch_local == -1
-              im = get_image_renderer(obj, 1.0, filter);
+                im = get_image_renderer(obj, 1.0, filter);
             end
             if nargin==2 && ~isempty(im)
                 if strcmp(post_filter, 'bkgrd1')
@@ -205,9 +250,9 @@ classdef tile
         %% Rendering by invoking a local client
         function im = get_image_renderer_client(obj, scale, filter)
             % filter must be a string, either "true" or "false"
-%             url = sprintf('%s/owner/%s/project/%s/stack/%s/tile/%s/render-parameters?scale=%s&filter=%s',...
-%                 obj.server, obj.owner, obj.project, obj.stack, obj.renderer_id, num2str(scale), filter);
-            exclude_mask = 'true';
+            %             url = sprintf('%s/owner/%s/project/%s/stack/%s/tile/%s/render-parameters?scale=%s&filter=%s',...
+            %                 obj.server, obj.owner, obj.project, obj.stack, obj.renderer_id, num2str(scale), filter);
+            exclude_mask = 'false';%'true';
             url = sprintf('%s/owner/%s/project/%s/stack/%s/tile/%s/render-parameters?scale=%.1f&filter=%s&excludeMask=%s&normalizeForMatching=true',...
                 obj.server, obj.owner, obj.project, obj.stack, obj.renderer_id, scale, filter, exclude_mask);
 
@@ -231,7 +276,7 @@ classdef tile
                 disp('Retrying');
                 pause(1.0);
                 try
-                im = imread(fn, 'jpg');
+                    im = imread(fn, 'jpg');
                 catch err_reading_image2
                     disp('Giving up');
                     im = [];
@@ -274,7 +319,7 @@ classdef tile
                         kk_disp_err(err_fetch_03);
                         pause(15);
                         try
-                        im = webread(url,options);
+                            im = webread(url,options);
                         catch err_fetch_04
                             disp('Try 4 failed: giving up');
                             kk_disp_err(err_fetch_04);
@@ -302,6 +347,7 @@ classdef tile
                         px = obj.W/2;
                         py = obj.H/2;
 
+
                         bo = [0 0;obj.W 0;0 obj.H;obj.W obj.H];
                         p = transformPointsInverse(obj.tform,bo);
                         Wbox = [min(p(:,1)) min(p(:,2)) max(p(:,1))-min(p(:,1)) max(p(:,2))-min(p(:,2))];
@@ -328,7 +374,7 @@ classdef tile
             warning on;
         end
         function im = show_warped(obj)
-             warning off;
+            warning off;
             im = get_warped_image(obj);
             imshow(im);
             warning on;
@@ -341,12 +387,35 @@ classdef tile
             imshow(F,[]); % Display the result
         end
         function obj = set_info(obj)
-            if obj.H==0,
-                if ~isempty(obj.path)
-                info = imfinfo(obj.path);     % slow
-                obj.H = info.Height;
-                obj.W = info.Width;
-                end
+            %             if obj.H==0,
+            %                 if ~isempty(obj.path)
+            %                 info = imfinfo(obj.path);     % slow
+            %                 obj.H = info.Height;
+            %                 obj.W = info.Width;
+            %                 end
+            %             end
+            webopts = weboptions('Timeout', 60);
+            %             urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/z/%.1f/tile-specs', ...
+            %                 obj.server, obj.owner, obj.project, obj.stack,obj.z);
+
+            urlChar = sprintf('%s/owner/%s/project/%s/stack/%s/tile/%s', ...
+                obj.server, obj.owner, obj.project, obj.stack,obj.renderer_id);
+            try
+                j = webread(urlChar, webopts);
+                jt1 = tile(j(1));
+                %             obj = jt1;
+                obj.W = jt1.W;
+                obj.H = jt1.H;
+                obj.minX = jt1.minX;
+                obj.minY = jt1.minY;
+                obj.maxX = jt1.maxX;
+                obj.maxY = jt1.maxY;
+            catch err_cannot_read_tile_spec
+                kk_disp_err(err_cannot_read_tile_spec);
+                disp('Assuming FAFB: W = 2160, H = 2560');
+                %% assume FAFB
+                obj.W = 2160;
+                obj.H = 2560;
             end
         end
     end

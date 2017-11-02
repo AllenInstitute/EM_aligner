@@ -2,7 +2,7 @@
 
 clc;%clear all;
 
-Slab_definition;
+Fine_align_slab_definition;
 kk_clock;
 
 %%
