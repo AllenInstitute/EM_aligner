@@ -1,0 +1,69 @@
+{
+	"first_section": 1015,
+	"last_section": 1034,
+	"solver_options": {
+		"degree": 1,
+		"solver": "backslash",
+		"transfac": 1e-15,
+		"lambda": 100.0,
+		"edge_lambda": 100.0,
+		"nbrs": 3,
+		"nbrs_step": 1,
+		"xs_weight": 1,
+		"min_points": 3,
+		"max_points": "_Inf_",
+		"filter_point_matches": 1,
+		"outlier_lambda": 100,
+		"min_tiles": 2,
+        "Width":3840,
+        "Height":3840,
+        "outside_group":"false",
+		"pastix": {
+			"ncpus": 8,
+			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
+			"split": 1
+		},
+		"matrix_only": 0,
+		"distribute_A": 16,
+		"dir_scratch": "/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/tmp",
+		"distributed": 0,
+		"disableValidation": 1,
+		"use_peg": 0,
+		"pmopts": {
+			"NumRandomSamplingsMethod": "Desired confidence",
+			"MaximumRandomSamples": 5000,
+			"DesiredConfidence": 99.9,
+			"PixelDistanceThreshold": 0.1
+		},
+		"verbose": 1,
+		"debug": 0,
+		"constrain_by_z": 0,
+		"sandwich": 0,
+		"constraint_fac": 1e+15
+	},
+	"source_collection": {
+		"owner": "gayathri",
+		"project": "MM2",
+		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039",
+		"service_host": "em-131fs:8080",
+		"baseURL": "http://em-131fs:8080/render-ws/v1",
+		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
+		"verbose": 0
+	},
+	"target_collection": {
+		"owner": "danielk",
+		"project": "Tests",
+		"stack": "Pre_order_experiment",
+		"service_host": "em-131fs:8080",
+		"baseURL": "http://em-131fs:8080/render-ws/v1",
+		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
+		"verbose": 0
+	},
+	"source_point_match_collection": {
+		"server": "http://em-131fs:8080/render-ws/v1",
+		"owner": "gayathri_MM2",
+		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine",
+		"verbose": 0
+	},
+	"verbose": 0
+}

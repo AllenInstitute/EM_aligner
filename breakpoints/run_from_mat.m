@@ -1,0 +1,1 @@
+[err,R, Tout, Diagnostics] = system_solve_affine_with_constraint_from_mat(matfilename,newstackname);
