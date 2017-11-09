@@ -78,7 +78,7 @@ else
             disp('Using distributed Ax=b');
             x2 = gather(distributed(K)\distributed(Lm));
         else
-            %verbose sparse solver
+            %make sparse solver verbose
             spparms('spumoni',2);
             %force symmetry
             K = 0.5*(K+K');
