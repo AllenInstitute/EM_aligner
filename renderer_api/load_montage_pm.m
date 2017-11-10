@@ -23,7 +23,11 @@ n1 = [];
 n1 = 0;
 for six = 1:numel(sID)  % loop over reacquires (if any)
     %disp([six count]);
+
+    %tic;disp(sprintf('a %s %f',sID{six},toc));
+    tic;
     jj = get_pms_montage(pm, sID{six}, wopts);
+    disp(sprintf('loaded montage %s        %0.1f seconds',sID{six},toc));tic;
     n1 = n1 + numel(jj);
     for jix = 1:numel(jj)
         if size(jj(jix).matches.p',1)>=min_points
@@ -56,8 +60,7 @@ for six = 1:numel(sID)  % loop over reacquires (if any)
             end
         end
     end
-    
-    
+    %disp(sprintf('c %s %f',sID{six},toc));
 end
 
 %%%% crosslayer for reacquires: get point matches across those individual section ids

@@ -1,6 +1,6 @@
 {
-	"first_section": 1044,
-	"last_section": 1084,
+	"first_section": 1015,
+	"last_section": 1029,
 	"solver_options": {
 		"degree": 1,
 		"solver": "backslash",
@@ -15,9 +15,9 @@
 		"filter_point_matches": 1,
 		"outlier_lambda": 100,
 		"min_tiles": 2,
-        "Width":3840,
-        "Height":3840,
-        "outside_group":"false",
+                "Width":3840,
+                "Height":3840,
+                "outside_group":0,
 		"pastix": {
 			"ncpus": 8,
 			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
@@ -25,7 +25,6 @@
 		},
 		"matrix_only": 0,
 		"distribute_A": 16,
-		"dir_scratch": "/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/tmp2",
 		"distributed": 0,
 		"disableValidation": 1,
 		"use_peg": 0,
@@ -39,7 +38,15 @@
 		"debug": 0,
 		"constrain_by_z": 0,
 		"sandwich": 0,
-		"constraint_fac": 1e+15
+		"constraint_fac": 1e+15,
+                "dologging": 1,
+                "logging":{
+                        "logroot": "/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab",
+                        "description": "default",
+                        "savePointMatches": 1,
+                        "saveDiagnostics": 1,
+                        "interface_pastix": 1
+                },
 	},
 	"source_collection": {
 		"owner": "gayathri",
@@ -48,22 +55,22 @@
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
-		"verbose": 0
+		"verbose": 1
 	},
 	"target_collection": {
 		"owner": "danielk",
 		"project": "MM2",
-		"stack": "Fine_align_from_aloha_A",
+		"stack": "Aloha_symmetric_solver2",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
-		"verbose": 0
+		"verbose": 1
 	},
 	"source_point_match_collection": {
 		"server": "http://em-131fs:8080/render-ws/v1",
 		"owner": "gayathri_MM2",
 		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine",
-		"verbose": 0
+		"verbose": 1
 	},
-	"verbose": 0
+	"verbose": 1
 }

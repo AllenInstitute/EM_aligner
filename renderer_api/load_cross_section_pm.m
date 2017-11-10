@@ -25,11 +25,14 @@ count = 1;
 if ~outside_group, fac = factors; end
 for six1 = 1:numel(sID1)                % loop over "re-acquires" if present. Usually numel(sID1) is equal to 1
     for six2 = 1:numel(sID2)            % loop over "re-acquires" if present. Usually numel(sID2) is equal to 1
+        tic;
         if outside_group
             j = get_pms_cross_layer(pm, sID1{1}, sID2{end}, wopts, outside_group); %if doing outside group, only need the extremes to load all the necessary point-matches
         else
             j = get_pms_cross_layer(pm, sID2{six2}, sID1{six1}, wopts);
         end
+        disp(sprintf('loaded cross   %s %s %0.1f seconds',sID1{six1},sID2{six2},toc));
+ 
         for jix = 1:numel(j)
             if size(j(jix).matches.p',1)>=min_points
                 % check that point-match is between tiles/canvases that exist in our working set

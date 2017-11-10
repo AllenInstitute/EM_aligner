@@ -132,14 +132,17 @@ if ~isfield(opts, 'filter_point_matches'), opts.filter_point_matches = 1;end
 if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
 
+opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
+dir_scratch = opts.AIBSdir;
+opts.dir_scratch = opts.AIBSdir;
 
 err = [];
 R = [];
 xout = [];
-dir_scratch = [opts.dir_scratch '/temp_' num2str(randi(3000000))];
+
 kk_mkdir(dir_scratch);
 cd(dir_scratch);
-diary on;
+diary off; diary on;
 % obtain actual section zvalues in given range their ids and also of possible reacquires
 [zu, sID, sectionId, z, ns] = get_section_ids(rc, nfirst, nlast);
 Diagnostics.zu = zu;
@@ -157,6 +160,7 @@ end
 %% Step 1: load transformations, tile ids
 % load all tiles in this range and pool into Msection object
 disp('Loading transformations and tile/canvas ids from Renderer database.....');
+tic;
 [T, map_id, tIds, z_val] = load_all_transformations(rc, zu, dir_scratch);
 ntiles = size(T,1);
 Diagnostics.ntiles = ntiles;
@@ -167,7 +171,9 @@ tdim = (degree + 1) * (degree + 2)/2; % number of coefficients for a particular 
 tdim = tdim * 2;        % because we have two dimensions, u and v.
 ncoeff = ntiles*tdim;
 disp('....done!');diary off;diary on;
+toc;
 %% Step 2: Load point-matches
+tic;
 if isfield(opts, 'PM')
     PM = opts.PM;
 else
@@ -186,6 +192,9 @@ else
         PM.adj = adj;
         PM.W = W;
         PM.np = np;
+        if opts.logging.savePointMatches
+            save(strcat(opts.AIBSdir,'/PM'),'PM');
+        end
     end
     if opts.use_peg
         %% generate new point-match entries to connect all tiles -- may not work for massive data yet
@@ -238,6 +247,7 @@ np = PM.np;
 % fn = [dir_scratch '/PM.mat'];
 % PM = matfile(fn);
 disp(' ..... done!');diary off;diary on;
+toc;
 %% Step 3: generate row slabs of matrix A
 %%%%% Experimental: set xy to zero (after having added fictitious tile is using peg.
 %     if opts.transfac<1.0  % then set x and y to 0,0 for each tile
@@ -322,6 +332,7 @@ S1 = cell2mat(S(:));clear S;
 Ib1 = cell2mat(Ib(:));clear Ib;
 Sb1 = cell2mat(Sb(:));clear Sb;
 disp('..... done!');
+toc;
 %% optionally save intermediate state
 if isfield(opts, 'save_temp_path') && ~isempty(opts.save_temp_path)
     disp('SOSI: Saving state with I1 J1 S1 ... etc before matrix construction');
@@ -339,6 +350,7 @@ end
 %                  opts.z_constraint
 %                  opts.constrain_by_z
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+tic;
 disp('** STEP 4:   Solving ....'); diary off;diary on;
 lambda = opts.lambda;
 disp('--------- using lambda:');
@@ -413,7 +425,10 @@ disp(['First section: ' num2str(zu(1))]);
 disp(['Last section : ' num2str(zu(end))]);
 disp('--------------------------');
 
-
+if opts.logging.interface_pastix
+    save_K_petsc(strcat(opts.AIBSdir,'/K.petsc'),K);
+    save_Lm_petsc(strcat(opts.AIBSdir,'/K.petsc.rhs'),Lm);
+end
 
 % SOLVE
 [x2, R, Diagnostics.timer_solve_A] = solve_AxB(K,Lm, opts, d);   
@@ -439,6 +454,10 @@ Diagnostics.res =  A*x2-b;
 
 Tout = reshape(x2, tdim, ncoeff/tdim)';% remember, the transformations
 
+if opts.logging.saveDiagnostics
+    save(strcat(opts.AIBSdir,'/Diagnostics'),'Diagnostics');
+end
+
 if opts.use_peg  % delete fictitious tile
     Tout(end,:) = [];
     tIds(end) = [];
@@ -449,7 +468,9 @@ end
 clear x2;
 clear K Lm d tb A b Wmx tB
 disp('.... done!');
+toc;
 %% ingest into Renderer
+tic;
 system_solve_helper_ingest_into_renderer_database(rc, rcout, ...
     Tout, tIds, z_val, opts, zu);
-
+toc;

@@ -20,6 +20,7 @@ else
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
   export LD_LIBRARY_PATH;
   echo LD_LIBRARY_PATH is ${LD_LIBRARY_PATH};
+  export TZ=America/Los_Angeles;
   shift 1
   args=
   while [ $# -gt 0 ]; do

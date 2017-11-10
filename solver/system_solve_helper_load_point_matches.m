@@ -47,7 +47,7 @@ if pm(end).verbose
     disp('** STEP 2:  Load point-matches ....');
     disp(' ... predict sequence of PM requests to match sequence required for matrix A');
 end
-
+tic;
 sID_all = {};
 if opts.outside_group
     fac = {};
@@ -101,10 +101,12 @@ for ix = 1:numel(zu)   % loop over sections  -- can this be made parfor?
 end
 % clear sID
 % % perform pm requests
+toc;
 
 if pm(end).verbose
     disp('Loading point-matches from point-match database ....');
 end
+tic;
 
 wopts = weboptions;
 wopts.Timeout = 20;
@@ -118,6 +120,7 @@ parfor ix = 1:size(sID_all,1)   % loop over sections
     % when loading point matches, load all available point
     % then filter them, and after that select points randomly to limit the size of
     % point-matches block
+
     if ismontage(ix)
         if opts.do_cross_only
             m = []; a = []; w = []; n = []; xnp = [];
@@ -134,8 +137,7 @@ parfor ix = 1:size(sID_all,1)   % loop over sections
                 map_id, opts.min_points, inf, wopts, fac(ix));
         end
     end
-    
-    
+
     %%% filter set of point-matches for this pair
     if opts.filter_point_matches
         if sum(n)
@@ -153,6 +155,7 @@ parfor ix = 1:size(sID_all,1)   % loop over sections
             [m, w, a, n] = filter_pm_local(m, w, a, n, opts.pmopts, filter_consistency, Width, Height);
         end
     end
+
     % loop over point-match sets: reduce to max_points if necessary
     delix = [];
     for pmix = 1:size(m,1)    % loop over point-match sets
@@ -184,16 +187,20 @@ parfor ix = 1:size(sID_all,1)   % loop over sections
     adj(ix) = {a};
     W(ix) = {w};
     np(ix) = {n};
+    
 end
 
 if isempty(np)
     error('No point-matches found');
 end
 clear sID_all
+toc;
+
 
 if pm(end).verbose
     disp('... concatenating point matches ...');
 end
+tic;
 
 % concatenate
 M = vertcat(M{:});
@@ -204,7 +211,7 @@ np  = [np{:}]';
 %%% additionally we return the vector of disconnected tiles that
 %%% might need to be discarded
 discard = setdiff(1:ntiles, unique(adj(:)));
-
+toc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 function [M, W, adj, np] = filter_pm_local(M, W, adj, np, opts, montage_flag, width, height)
