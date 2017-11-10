@@ -17,7 +17,7 @@
 		"min_tiles": 2,
         "Width":3840,
         "Height":3840,
-        "outside_group":"false",
+        "outside_group":0,
 		"pastix": {
 			"ncpus": 8,
 			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",

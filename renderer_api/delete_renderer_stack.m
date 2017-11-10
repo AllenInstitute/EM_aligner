@@ -14,7 +14,7 @@ end
 
 str1 = sprintf('PROJECT_PARAMS="--baseDataUrl %s --owner %s --project %s";', rc.baseURL, rc.owner, rc.project);
 str2 = sprintf('TARGET_STACK="%s";', rc.stack);
-str3 = sprintf('%s/manage-stack.sh ${PROJECT_PARAMS} --action DELETE --stack ${TARGET_STACK}', rc.renderbinPath);
+str3 = sprintf('%s/manage_stacks.sh ${PROJECT_PARAMS} --action DELETE --stack ${TARGET_STACK}', rc.renderbinPath);
 strcmd = [str1 str2 str3];
 
 try
