@@ -1,0 +1,62 @@
+{
+	"first_section": 1015,
+	"last_section": 1100,
+	"solver_options": {
+		"degree": 0,
+		"solver": "backslash",
+		"stvec_flag": 0,
+		"nbrs": 36,
+		"nbrs_step": 3,
+		"xs_weight": 1,
+		"min_points": 3,
+		"max_points": "_Inf_",
+		"filter_point_matches": 1,
+		"outlier_lambda": 100,
+		"min_tiles": 2,
+		"pastix": {
+			"ncpus": 8,
+			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
+			"split": 1
+		},
+		"matrix_only": 0,
+		"distribute_A": 16,
+		"dir_scratch": "/allen/aibs/pipeline/image_processing/volume_assembly/scratch",
+		"distributed": 0,
+		"disableValidation": 1,
+		"use_peg": 0,
+		"nchunks_ingest": 10,
+		"pmopts": {
+			"NumRandomSamplingsMethod": "Desired confidence",
+			"MaximumRandomSamples": 5000,
+			"DesiredConfidence": 99.9,
+			"PixelDistanceThreshold": 0.1
+		},
+		"verbose": 1,
+		"debug": 0
+	},
+	"source_collection": {
+		"owner": "gayathri",
+		"project": "MM2",
+		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_DSM_rev1039",
+		"service_host": "em-131fs:8080",
+		"baseURL": "http://em-131fs:8080/render-ws/v1",
+		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
+		"verbose": 0
+	},
+	"target_collection": {
+		"owner": "gayathri",
+		"project": "MM2",
+		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_DSM_Rough_rev1039_rigid",
+		"service_host": "em-131fs:8080",
+		"baseURL": "http://em-131fs:8080/render-ws/v1",
+		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
+		"verbose": 0
+	},
+	"source_point_match_collection": {
+		"server": "http://em-131fs:8080/render-ws/v1",
+		"owner": "gayathri_MM2",
+		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039",
+		"verbose": 0
+	},
+	"verbose": 0
+}

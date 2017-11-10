@@ -23,7 +23,7 @@ if ~isfield(rc, 'renderbinPath')
     rc.renderbinPath = '/data/nc-em2/gayathrim/Janelia_Pipeline/renderBin/bin';
 end
 
-strcmd = sprintf('%s/manage-stack.sh --baseDataUrl %s --owner %s --project %s --action CREATE --stack %s --versionNotes "%s";',...
+strcmd = sprintf('%s/manage_stacks.sh --baseDataUrl %s --owner %s --project %s --action CREATE --stack %s --versionNotes "%s";',...
     rc.renderbinPath, rc.baseURL, rc.owner, rc.project, rc.stack, rc.versionNotes);
 
 

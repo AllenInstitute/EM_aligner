@@ -1,6 +1,6 @@
 {
-	"first_section": 1015,
-	"last_section": 1018,
+	"first_section": 1080,
+	"last_section": 1082,
 	"solver_options": {
 		"degree": 1,
 		"solver": "backslash",
@@ -17,7 +17,7 @@
 		"min_tiles": 2,
         "Width":3840,
         "Height":3840,
-        "outside_group":"false",
+        "outside_group":0,
 		"pastix": {
 			"ncpus": 8,
 			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
@@ -44,7 +44,7 @@
 	"source_collection": {
 		"owner": "gayathri",
 		"project": "MM2",
-		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039",
+		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v1",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
