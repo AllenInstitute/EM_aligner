@@ -30,7 +30,6 @@ end
 
 sl = set_user_environment(sl);
 
-disp('tmp');
 
 [err,R, Tout, Diagnostics] = system_solve_affine_with_constraint(sl.first_section, sl.last_section, sl.source_collection, sl.source_point_match_collection, sl.solver_options, sl.target_collection);
 

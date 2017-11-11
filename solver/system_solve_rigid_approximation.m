@@ -41,7 +41,11 @@ if ~isfield(opts, 'delete_existing_collection'), opts.delete_existing_collection
 err = [];
 R = [];
 xout = [];
-dir_scratch = [opts.dir_scratch '/temp_' num2str(randi(3000000))];
+
+opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
+dir_scratch = opts.AIBSdir;
+opts.dir_scratch = opts.AIBSdir;
+
 kk_mkdir(dir_scratch);
 cd(dir_scratch);
 
