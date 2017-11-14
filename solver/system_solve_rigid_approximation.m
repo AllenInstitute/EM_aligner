@@ -118,7 +118,9 @@ if opts.use_peg
     ntiles = ntiles + 1;
     ncoeff = ncoeff + btdim;
 end
-
+if opts.logging.savePointMatches
+    save(strcat(opts.AIBSdir,'/PM'),'PM');
+end
 M = PM.M;
 adj = PM.adj;
 W = PM.W;
@@ -217,6 +219,12 @@ A = A(:, 5:end);
 
 K  = A'*Wmx*A;
 Lm  = A'*Wmx*b;
+if opts.logging.interface_pastix
+    save_K_petsc(strcat(opts.AIBSdir,'/K.petsc'),K);
+    save_Lm_petsc(strcat(opts.AIBSdir,'/K.petsc.rhs'),Lm);
+end
+
+
 [x2, R] = solve_AxB(K,Lm, opts, []);
 
 precision = norm(K*x2-Lm)/norm(Lm);
