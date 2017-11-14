@@ -192,9 +192,7 @@ else
         PM.adj = adj;
         PM.W = W;
         PM.np = np;
-        if opts.logging.savePointMatches
-            save(strcat(opts.AIBSdir,'/PM'),'PM');
-        end
+
     end
     if opts.use_peg
         %% generate new point-match entries to connect all tiles -- may not work for massive data yet
@@ -237,6 +235,9 @@ else
         ntiles = ntiles + 1;
         ncoeff = ncoeff + tdim;
     end
+end
+if opts.logging.savePointMatches
+    save(strcat(opts.AIBSdir,'/PM'),'PM');
 end
 M = PM.M;
 adj = PM.adj;
@@ -433,7 +434,9 @@ end
 % SOLVE
 [x2, R, Diagnostics.timer_solve_A] = solve_AxB(K,Lm, opts, d);   
 
-
+if opts.logging.interface_pastix
+    save_Lm_petsc(strcat(opts.AIBSdir,'/x2.txt'),x2);
+end
 
 %     Diagnostics.timer_solve_A = toc(timer_solve_A);
 Diagnostics.nnz_A = nnz(A);
