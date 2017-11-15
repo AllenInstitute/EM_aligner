@@ -8,6 +8,8 @@ class Diagnostics:
         self.fname=fname
         self.raw=(loadmat(fdir+'/'+fname))['Diagnostics']
         self.parse()
+        self.words()
+        self.plot_overview()
 
     def parse(self):
         self.sections = self.raw[0][0][0][0]
