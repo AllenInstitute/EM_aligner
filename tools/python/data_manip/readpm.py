@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #use these for using render
-source_name='mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_rev1039'
+#source_name='mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_rev1039'
+source_name='mm2_acquire_8bit_reimage_montage'
 #source_name = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine'
 source_owner='gayathri_MM2'
 #define source and target
@@ -136,4 +137,5 @@ for chunk in chunks:
     #save the figure and reset to the next page 
     #save the page
     pdf.savefig()
+
 pdf.close()
