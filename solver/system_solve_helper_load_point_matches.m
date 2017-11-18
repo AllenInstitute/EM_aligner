@@ -230,12 +230,23 @@ verbose = 0;
 %warning('off', 'vision:obsolete:obsoleteFunctionality');
 geoTransformEst = vision.GeometricTransformEstimator; % defaults to RANSAC
 geoTransformEst.Method = 'Random Sample Consensus (RANSAC)';%'Least Median of Squares';%'Random Sample Consensus (RANSAC)'; %
-geoTransformEst.Transform = 'Nonreflective similarity';%'Affine'; % Valid values: 'Affine',
+%geoTransformEst.Transform = 'Nonreflective similarity';%'Affine'; % Valid values: 'Affine',
+geoTransformEst.Transform = 'Affine'; % Valid values: 'Affine',
+%geoTransformEst.RefineTransformMatrix = 1; % Valid values: 'Affine',
 geoTransformEst.NumRandomSamplingsMethod = opts.NumRandomSamplingsMethod;% 'Desired confidence';
 geoTransformEst.MaximumRandomSamples = opts.MaximumRandomSamples;%3000;
 geoTransformEst.DesiredConfidence = opts.DesiredConfidence; %99.5;
-geoTransformEst.PixelDistanceThreshold = opts.PixelDistanceThreshold; %0.01;
+%geoTransformEst.PixelDistanceThreshold = opts.PixelDistanceThreshold; %0.01;
+if montage_flag==0
+    geoTransformEst.PixelDistanceThreshold = opts.PixelDistanceThreshold_Cross;
+else
+    geoTransformEst.PixelDistanceThreshold = opts.PixelDistanceThreshold_Montage;
+end
 
+%geoTransformEst.NumRandomSamplingsMethod = 'Specified value';% 'Desired confidence';
+%geoTransformEst.InlierPercentageSource = 'Property';
+%geoTransformEst.InlierPercentage=50;
+%geoTransformEst.ExcludeOutliers=1;
 
 % M = pm.M;
 % W = pm.W;
