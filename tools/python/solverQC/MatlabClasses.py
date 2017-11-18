@@ -1,4 +1,5 @@
 from scipy.io import loadmat
+from mpl_toolkits.mplot3d import Axes3D 
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -45,7 +46,7 @@ class Diagnostics:
         f = plt.figure()
         print 'Showing in Figure %s'%f.number
         # residuals
-        plt.subplot(3,1,1)
+        plt.subplot(4,2,1)
         plt.plot(self.residuals,'-k')
         plt.xlabel('row of A (point match DOF)')
         plt.ylabel('residual (Ax-b) [pixels]')
@@ -53,37 +54,59 @@ class Diagnostics:
         plt.xlim(0,self.residuals.size)
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
 
+        ax = plt.subplot(4,2,2)
+        plt.hist(np.abs(self.residuals),bins=np.logspace(-8,4,20),facecolor='k',alpha=0.5)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        plt.xlabel('residual (Ax-b) [pixels]')
+        plt.ylabel('count')
+
         #tile error x
-        plt.subplot(3,2,3)
+        plt.subplot(4,2,3)
         plt.plot(self.tile_err[:,0])
         plt.grid()
         plt.xlim(0,self.tile_err.shape[0])
         plt.ylabel('average x error per tile [pixels]')
         plt.xlabel('tile number')
+
+        ax = plt.subplot(4,2,4)
+        plt.hist(np.abs(self.tile_err[:,0]),bins=np.logspace(-8,4,20),facecolor='b',alpha=0.5)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        plt.xlabel('average x error per tile [pixels]')
+        plt.ylabel('count')
         
         #tile error y
-        plt.subplot(3,2,5)
+        plt.subplot(4,2,5)
         plt.plot(self.tile_err[:,1])
         plt.grid()
         plt.xlim(0,self.tile_err.shape[0])
         plt.ylabel('average y error per tile [pixels]')
         plt.xlabel('tile number')
 
+        ax = plt.subplot(4,2,6)
+        plt.hist(np.abs(self.tile_err[:,1]),bins=np.logspace(-8,4,20),facecolor='b',alpha=0.5)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        plt.xlabel('average y error per tile [pixels]')
+        plt.ylabel('count')
+        
         #rms
-        plt.subplot(3,2,4)
+        plt.subplot(4,2,7)
         plt.plot(self.rms,'g')
         plt.xlim(0,self.tile_err.shape[0])
         plt.grid()
         plt.ylabel('rms error per tile [pixels]')
         plt.xlabel('tile number')
+       
+        ax = plt.subplot(4,2,8)
+        plt.hist(self.rms,bins=np.logspace(-8,4,20),facecolor='g',alpha=0.5)
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        plt.xlabel('rms error per tile [pixels]')
+        plt.ylabel('count')
         
-        #delix
-        plt.subplot(3,2,6)
-        plt.plot(self.delix,'m')
-        plt.xlim(0,self.tile_err.shape[0])
-        plt.grid()
-        plt.ylabel('delix')
-        plt.xlabel('tile number')
+         
         
 class PointMatches:
     def __init__(self,fdir,fname):
@@ -99,6 +122,9 @@ class PointMatches:
         self.nptsperpair = np.zeros(self.ntilepairs)
         for i in np.arange(self.ntilepairs):
             self.nptsperpair[i] = len(self.raw[0][0][0][i][0]) 
+        self.adj = self.raw['adj'][0][0]
+        self.np = self.raw['np'][0][0].flatten()
+        self.ntiles = self.adj.max()
 
     def words(self):
         print 'Read from %s/%s'%(self.fdir,self.fname)
@@ -121,4 +147,32 @@ class PointMatches:
         plt.ylabel('# pts per tile pair')
         plt.xlabel('# of tile pairs')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+
+    def number_plot(self):
+        fig = plt.figure()
+        ax = plt.subplot(1,2,1)
+        plt.scatter(self.adj[:,0],self.adj[:,1],c=self.np,edgecolor='None')
+        plt.xlim(0,self.ntiles)
+        plt.ylim(0,self.ntiles)
+        plt.gca().set_aspect('equal')
+        plt.colorbar()
+        plt.gca().invert_xaxis()
+        plt.gca().invert_yaxis()
+        plt.xlabel('tile #')
+        plt.ylabel('tile #')
+       
+        ax = fig.add_subplot(122, projection='3d')
+        ax.scatter(self.adj[:,0],self.adj[:,1],self.np,c=self.np,edgecolor='None')
+        ax.view_init(20,70)
+        plt.xlim(0,self.ntiles)
+        plt.ylim(0,self.ntiles)
+        ax.set_zlabel('# of point matches')
+
+        plt.show()
+        
+
+
+ 
+
+        
 
