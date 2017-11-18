@@ -132,7 +132,7 @@ if ~isfield(opts, 'filter_point_matches'), opts.filter_point_matches = 1;end
 if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
 
-opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
+%opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
 dir_scratch = opts.AIBSdir;
 opts.dir_scratch = opts.AIBSdir;
 
@@ -140,7 +140,7 @@ err = [];
 R = [];
 xout = [];
 
-kk_mkdir(dir_scratch);
+%kk_mkdir(dir_scratch);
 cd(dir_scratch);
 diary off; diary on;
 % obtain actual section zvalues in given range their ids and also of possible reacquires
@@ -237,8 +237,14 @@ else
     end
 end
 if opts.logging.savePointMatches
-    save(strcat(opts.AIBSdir,'/PM'),'PM');
+    wch = whos('PM');
+    if wch.bytes<(1.9e9)
+        save(strcat(opts.AIBSdir,'/PM'),'PM');
+    else
+        save(strcat(opts.AIBSdir,'/PM'),'PM','-v7.3');
+    end
 end
+
 M = PM.M;
 adj = PM.adj;
 W = PM.W;
@@ -429,6 +435,7 @@ disp('--------------------------');
 if opts.logging.interface_pastix
     save_K_petsc(strcat(opts.AIBSdir,'/K.petsc'),K);
     save_Lm_petsc(strcat(opts.AIBSdir,'/K.petsc.rhs'),Lm);
+    save_Lm_petsc(strcat(opts.AIBSdir,'/d.txt'),d);
 end
 
 % SOLVE
@@ -459,6 +466,7 @@ Tout = reshape(x2, tdim, ncoeff/tdim)';% remember, the transformations
 
 if opts.logging.saveDiagnostics
     save(strcat(opts.AIBSdir,'/Diagnostics'),'Diagnostics');
+    %save(strcat(opts.AIBSdir,'/Diagnostics'),'Diagnostics','-v7.3');
 end
 
 if opts.use_peg  % delete fictitious tile
