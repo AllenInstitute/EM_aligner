@@ -222,10 +222,15 @@ Lm  = A'*Wmx*b;
 if opts.logging.interface_pastix
     save_K_petsc(strcat(opts.AIBSdir,'/K.petsc'),K);
     save_Lm_petsc(strcat(opts.AIBSdir,'/K.petsc.rhs'),Lm);
+    save_Lm_petsc(strcat(opts.AIBSdir,'/d.txt'),Lm*0.0);
 end
 
 
 [x2, R] = solve_AxB(K,Lm, opts, []);
+
+if opts.logging.interface_pastix
+    save_Lm_petsc(strcat(opts.AIBSdir,'/x2.txt'),x2);
+end
 
 precision = norm(K*x2-Lm)/norm(Lm);
 disp(['Simlarity Precision: ' num2str(precision)]);
