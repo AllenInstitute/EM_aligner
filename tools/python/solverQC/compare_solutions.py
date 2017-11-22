@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 
-fdir = '/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171117.9/'
+fdir1 = '/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171117.9/'
 
 guess = np.loadtxt(fdir+'d.txt')
 msol = np.loadtxt(fdir+'x2.txt')
