@@ -50,7 +50,7 @@ function [err,R, Tout, Diagnostics] = system_solve_affine_with_constraint(nfirst
 %     opts.sandwich = 0;                      % when set to 1 constrains first z (nfirst) and last z (nlast) by opts.constraint_fac. Note: must set opts.constrain_by_z to 1.
 %     opts.constraint_fac = 1e15;             % regularization constraint for first and last z when opts.sandwich equals 1. Should be very high.
 %     opts.z_constraint =[505 1e-4; 506 1e-4];% if opts.constain_by_z equals 1 and opts.sandwich
-%                                             % equals zero, then list z-values and lambda
+%                                             % equals zero, input filethen list z-values and lambda
 %                                             % regularization for each section whose tiles should
 %                                             % have a lambda value different than opts.lambda.
 %                                             % If also translation constraint should be different
@@ -131,16 +131,21 @@ if ~isfield(opts, 'transfac'), opts.transfac = 1;end
 if ~isfield(opts, 'filter_point_matches'), opts.filter_point_matches = 1;end
 if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
+if ~isfield(opts, 'set_complete'), opts.set_complete = 1;end
+
 
 %opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
 dir_scratch = opts.AIBSdir;
 opts.dir_scratch = opts.AIBSdir;
+
+%opts.z_constraint=[1023 1e-3 1.0];
 
 err = [];
 R = [];
 xout = [];
 
 %kk_mkdir(dir_scratch);
+disp(dir_scratch);
 cd(dir_scratch);
 diary off; diary on;
 % obtain actual section zvalues in given range their ids and also of possible reacquires
@@ -372,6 +377,7 @@ w = cell2mat(w(:));
 Wmx = spdiags(w,0,size(A,1),size(A,1));
 clear w;
 d = reshape(T', ncoeff,1);
+
 %clear T;
 
 % build constraints into system

@@ -4,13 +4,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Diagnostics:
-    def __init__(self,fdir,fname):
+    def __init__(self,fdir,fname,words=True,plot=True):
         self.fdir=fdir
         self.fname=fname
         self.raw=(loadmat(fdir+'/'+fname))['Diagnostics']
         self.parse()
-        self.words()
-        self.plot_overview()
+        if words:
+            self.words()
+        if plot:
+            self.plot_overview()
 
     def parse(self):
         self.sections = self.raw[0][0][0][0]
@@ -22,7 +24,7 @@ class Diagnostics:
         self.precision = self.raw[0][0][6][0][0]
         self.err = self.raw[0][0][7][0][0]
         self.dim_A = self.raw[0][0][8][0]
-        self.residuals = self.raw[0][0][9]
+        self.residuals = (self.raw[0][0][9]).flatten()
         self.tile_err = self.raw[0][0][10]
         self.rms = self.raw[0][0][11]
         self.delix = self.raw[0][0][12]
@@ -109,20 +111,21 @@ class Diagnostics:
          
         
 class PointMatches:
-    def __init__(self,fdir,fname):
+    def __init__(self,fdir,fname,plot=True):
         self.fdir=fdir
         self.fname=fname
         self.raw=(loadmat(fdir+'/'+fname))['PM']
         self.parse()
         self.words()
-        self.plot_overview()
+        if plot:
+            self.plot_overview()
 
     def parse(self):
         self.ntilepairs = len(self.raw[0][0][0])
         self.nptsperpair = np.zeros(self.ntilepairs)
         for i in np.arange(self.ntilepairs):
             self.nptsperpair[i] = len(self.raw[0][0][0][i][0]) 
-        self.adj = self.raw['adj'][0][0]
+        self.adj = (self.raw['adj'][0][0]).astype('int16')
         self.np = self.raw['np'][0][0].flatten()
         self.ntiles = self.adj.max()
 
@@ -169,10 +172,5 @@ class PointMatches:
         ax.set_zlabel('# of point matches')
 
         plt.show()
-        
-
-
- 
-
         
 

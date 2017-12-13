@@ -20,6 +20,12 @@ else
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
   export LD_LIBRARY_PATH;
   echo LD_LIBRARY_PATH is ${LD_LIBRARY_PATH};
+
+  export EMA_RENDERBINPATH=/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts;
+  export EMA_SERVICE_HOST=em-131fs:8080;
+  
+  echo EMA_LOGROOT is ${EMA_LOGROOT};
+
   export TZ=America/Los_Angeles;
   shift 1
   args=

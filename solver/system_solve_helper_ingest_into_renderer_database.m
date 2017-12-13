@@ -46,9 +46,14 @@ if ~isempty(rcout)
             tIds(vec), z_val(vec), v, opts.disableValidation);
     end
     
-    % % complete stack
-    disp(' .... completing stack...');
-    resp = set_renderer_stack_state_complete(rcout);
+    if opts.set_complete==1
+        % % complete stack
+        disp(' .... completing stack...');
+        resp = set_renderer_stack_state_complete(rcout);
+    else
+        disp(' .... not completing stack...');
+    end
+
 else
     warning('Not ingesting anything because output collection is not specified');
 end
