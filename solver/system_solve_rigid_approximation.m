@@ -37,12 +37,15 @@ if ~isfield(opts, 'filter_point_matches'), opts.filter_point_matches = 1;end
 if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
 if ~isfield(opts, 'delete_existing_collection'), opts.delete_existing_collection = 1; end
+if ~isfield(opts, 'set_complete'), opts.set_complete = 1;end
+
 
 err = [];
 R = [];
 xout = [];
 
-opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
+%opts.AIBSdir = set_AIBS_logging_path(opts.logging.logroot,opts.logging.description);
+
 dir_scratch = opts.AIBSdir;
 opts.dir_scratch = opts.AIBSdir;
 
@@ -315,6 +318,7 @@ diary off;
 [err,R, Tout] = system_solve_translation_support_rigid(...
     nfirst, nlast, rctemp,...
     pm, opts, rcout, Tout, map_id, tIds, z_val, PM);
+
 delete_renderer_stack(rctemp);
 
 
