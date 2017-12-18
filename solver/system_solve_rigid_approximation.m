@@ -38,6 +38,8 @@ if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
 if ~isfield(opts, 'delete_existing_collection'), opts.delete_existing_collection = 1; end
 if ~isfield(opts, 'set_complete'), opts.set_complete = 1;end
+if ~isfield(opts, 'scale_to_unity'),opts.scale_to_unity = 1;end
+if ~isfield(opts, 'delete_temp_stack'),opts.delete_temp_stack = 1;end
 
 
 err = [];
@@ -242,12 +244,15 @@ disp(['Similarity Error norm(Ax-b): ' num2str(err)]);
 Error = err;
 Tout = full(reshape(x2, btdim, (ncoeff-4)/btdim)');%
 
+
 %% step 4': rescale all tiles to unity
-parfor ix = 1:size(Tout,1)
-    Tf = Tout(ix, :);
-    [U S V] = svd(reshape(Tf, 2, 2));
-    Tf = U * [1 0; 0 1] * V';  % rescale to unity
-    Tout(ix,:) = Tf(:)';
+if opts.scale_to_unity
+    parfor ix = 1:size(Tout,1)
+        Tf = Tout(ix, :);
+        [U S V] = svd(reshape(Tf, 2, 2));
+        Tf = U * [1 0; 0 1] * V';  % rescale to unity
+        Tout(ix,:) = Tf(:)';
+    end
 end
 % add the first tile back and add zeros to complete affine set
 zer = zeros((ncoeff-4)/btdim, 1);
@@ -319,8 +324,9 @@ diary off;
     nfirst, nlast, rctemp,...
     pm, opts, rcout, Tout, map_id, tIds, z_val, PM);
 
-delete_renderer_stack(rctemp);
-
+if opts.delete_temp_stack
+    delete_renderer_stack(rctemp);
+end
 
 
 
