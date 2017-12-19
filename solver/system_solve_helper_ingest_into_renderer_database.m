@@ -40,7 +40,7 @@ if ~isempty(rcout)
     cs = 1:chks:ntiles;
     cs(end) = ntiles;
     disp(' .... ingesting ....');
-    parfor ix = 1:numel(cs)-1
+    for ix = 1:numel(cs)-1
         vec = cs(ix):cs(ix+1);
         export_to_renderer_database(rcout, rc, opts.dir_scratch, Tout(vec,:),...
             tIds(vec), z_val(vec), v, opts.disableValidation);

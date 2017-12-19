@@ -107,13 +107,14 @@ if pm(end).verbose
 end
 
 wopts = weboptions;
-wopts.Timeout = 20;
+wopts.Timeout = 500;
 
 M   = {};
 adj = {};
 W   = {};
 np = {};  % store a vector with number of points in point-matches (so we don't need to loop again later)
-parfor ix = 1:size(sID_all,1)   % loop over sections
+%parfor ix = 1:size(sID_all,1)   % loop over sections
+for ix = 1:size(sID_all,1)
     %disp([sID_all{ix,1}{1} ' ' sID_all{ix,2}{1} ' ' num2str(ismontage(ix))]);
     % when loading point matches, load all available point
     % then filter them, and after that select points randomly to limit the size of
@@ -223,7 +224,8 @@ verbose = 0;
 %warning('off', 'vision:obsolete:obsoleteFunctionality');
 geoTransformEst = vision.GeometricTransformEstimator; % defaults to RANSAC
 geoTransformEst.Method = 'Random Sample Consensus (RANSAC)';%'Least Median of Squares';%'Random Sample Consensus (RANSAC)'; %
-geoTransformEst.Transform = 'Nonreflective similarity';%'Affine'; % Valid values: 'Affine',
+%geoTransformEst.Transform = 'Nonreflective similarity';%'Affine'; % Valid values: 'Affine',
+geoTransformEst.Transform = opts.Transform;
 geoTransformEst.NumRandomSamplingsMethod = opts.NumRandomSamplingsMethod;% 'Desired confidence';
 geoTransformEst.MaximumRandomSamples = opts.MaximumRandomSamples;%3000;
 geoTransformEst.DesiredConfidence = opts.DesiredConfidence; %99.5;

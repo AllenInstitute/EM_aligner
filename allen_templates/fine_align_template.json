@@ -1,19 +1,19 @@
 {
-	"first_section": 1080,
-	"last_section": 1082,
+	"first_section": 1065,
+	"last_section": 1100,
 	"solver_options": {
 		"degree": 1,
 		"solver": "backslash",
-		"transfac": 1e-15,
-		"lambda": 100.0,
-		"edge_lambda": 100.0,
-		"nbrs": 3,
+		"transfac": 1,
+		"lambda": 0.0001,
+		"edge_lambda": 0.0001,
+		"nbrs": 2,
 		"nbrs_step": 1,
 		"xs_weight": 1,
 		"min_points": 3,
 		"max_points": "_Inf_",
 		"filter_point_matches": 1,
-		"outlier_lambda": 100,
+		"outlier_lambda": 1000,
 		"min_tiles": 2,
         "Width":3840,
         "Height":3840,
@@ -33,7 +33,8 @@
 			"NumRandomSamplingsMethod": "Desired confidence",
 			"MaximumRandomSamples": 5000,
 			"DesiredConfidence": 99.9,
-			"PixelDistanceThreshold": 0.1
+			"PixelDistanceThreshold": 0.1,
+            "Transform": "Affine"
 		},
 		"verbose": 1,
 		"debug": 0,
@@ -44,7 +45,7 @@
 	"source_collection": {
 		"owner": "gayathri",
 		"project": "MM2",
-		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v1",
+		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v2",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
@@ -53,7 +54,7 @@
 	"target_collection": {
 		"owner": "gayathri",
 		"project": "Tests",
-		"stack": "mm2_acquire_EM_aligner_Fine_Test",
+		"stack": "mm2_acquire_EM_aligner_Affine_Fine_Rigid_Rough_6",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
@@ -62,7 +63,7 @@
 	"source_point_match_collection": {
 		"server": "http://em-131fs:8080/render-ws/v1",
 		"owner": "gayathri_MM2",
-		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine",
+		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_rev1039",
 		"verbose": 0
 	},
 	"verbose": 0
