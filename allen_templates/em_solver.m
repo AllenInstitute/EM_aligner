@@ -1,4 +1,4 @@
-function system_solve_main(fn)
+function em_solver(fn)
 
 % main function for solving rigid/affine solution
 

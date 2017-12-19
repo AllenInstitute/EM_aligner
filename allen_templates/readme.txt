@@ -30,12 +30,12 @@ in the MathWorks Documentation Center.
 
 Files to package for Standalone 
 ================================
--system_solve_main 
--run_system_solve_main.sh (shell script for temporarily setting environment variables and 
-                           executing the application)
+-em_solver 
+-run_em_solver.sh (shell script for temporarily setting environment variables and 
+                   executing the application)
    -to run the shell script, type
    
-       ./run_system_solve_main.sh <mcr_directory> <argument_list>
+       ./run_em_solver.sh <mcr_directory> <argument_list>
        
     at Linux or Mac command prompt. <mcr_directory> is the directory 
     where version 9.1 of the MATLAB Runtime is installed or the directory where 
@@ -45,12 +45,12 @@ Files to package for Standalone
     If you have version 9.1 of the MATLAB Runtime installed in 
     /mathworks/home/application/v91, run the shell script as:
     
-       ./run_system_solve_main.sh /mathworks/home/application/v91
+       ./run_em_solver.sh /mathworks/home/application/v91
        
     If you have MATLAB installed in /mathworks/devel/application/matlab, 
     run the shell script as:
     
-       ./run_system_solve_main.sh /mathworks/devel/application/matlab
+       ./run_em_solver.sh /mathworks/devel/application/matlab
 -MCRInstaller.zip
    -if end users are unable to download the MATLAB Runtime using the above  
     link, include it when building your component by clicking 
@@ -104,7 +104,7 @@ In the following directions, replace MCR_ROOT by the directory where the MATLAB 
         NOTE: The environment variable syntax utilizes forward 
               slashes (/), delimited by colons (:).  
         NOTE: When deploying standalone applications, it is possible 
-              to run the shell script file run_system_solve_main.sh 
+              to run the shell script file run_em_solver.sh 
               instead of setting environment variables. See 
               section 2 "Files to Deploy and Package".    
 
