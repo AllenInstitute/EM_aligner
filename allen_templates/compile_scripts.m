@@ -21,10 +21,10 @@ cmd5 = sprintf('mcc -m -R -nodesktop -v %s/matlab_compiled/solve_slab_SL.m -N -p
 cmd6 = sprintf('mcc -m -R -nodesktop -v %s/matlab_compiled/point_match_gen_pairs_SURF.m -N -p %s -a %s -a %s -a %s -d %s', EM_ALIGNER_ROOT, EM_ALIGNER_ROOT, solver_scripts, jsonlab_scripts, classes, OUTPUT_FOLDER);
 cmd7 = sprintf('mcc -m -R -nodesktop -v %s/allen_templates/em_solver.m -N -p %s -p vision -a %s -a %s -a %s -d %s', EM_ALIGNER_ROOT, EM_ALIGNER_ROOT, solver_scripts, jsonlab_scripts, classes, OUTPUT_FOLDER);
 
-%eval(cmd1);
-%eval(cmd2);
-%eval(cmd3);
-%eval(cmd4);
-%eval(cmd5);
-%eval(cmd6);
+eval(cmd1);
+eval(cmd2);
+eval(cmd3);
+eval(cmd4);
+eval(cmd5);
+eval(cmd6);
 eval(cmd7);
