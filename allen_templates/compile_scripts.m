@@ -26,4 +26,5 @@ cmd7 = sprintf('mcc -m -R -nodesktop -v %s/allen_templates/em_solver.m -N -p %s 
 %eval(cmd3);
 %eval(cmd4);
 %eval(cmd5);
-eval(cmd6);
+%eval(cmd6);
+eval(cmd7);
