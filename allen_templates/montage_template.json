@@ -2,7 +2,7 @@
 	"first_section": 1024,
 	"last_section": 1024,
 	"solver_options": {
-		"degree": 0,
+		"degree": 1,
 		"solver": "backslash",
 		"transfac": 1,
 		"lambda": 0.005,

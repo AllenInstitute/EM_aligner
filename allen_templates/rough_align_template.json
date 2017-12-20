@@ -1,13 +1,13 @@
 {
 	"first_section": 1015,
-	"last_section": 1100,
+	"last_section": 1519,
 	"solver_options": {
 		"degree": 1,
 		"solver": "backslash",
 		"transfac": 1e-15,
 		"lambda": 100.0,
 		"edge_lambda": 100.0,
-		"nbrs": 3,
+		"nbrs": 5,
 		"nbrs_step": 1,
 		"xs_weight": 1,
 		"min_points": 3,
@@ -15,9 +15,9 @@
 		"filter_point_matches": 1,
 		"outlier_lambda": 100,
 		"min_tiles": 2,
-    "Width":3840,
-    "Height":3840,
-    "outside_group":0,
+        "Width":3840,
+        "Height":3840,
+        "outside_group":0,
 		"pastix": {
 			"ncpus": 8,
 			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
@@ -33,6 +33,7 @@
 			"NumRandomSamplingsMethod": "Desired confidence",
 			"MaximumRandomSamples": 5000,
 			"DesiredConfidence": 99.9,
+            "Transform":"AFFINE",
 			"PixelDistanceThreshold": 0.1
 		},
 		"verbose": 1,
@@ -42,18 +43,18 @@
 		"constraint_fac": 1e+15
 	},
 	"source_collection": {
-		"owner": "gayathri",
-		"project": "MM2",
-		"stack": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_DSM",
+		"owner": "russelt",
+		"project": "Reflections",
+		"stack": "Secs_1015_1099_5_reflections_mml6_ds_montage",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
 		"verbose": 0
 	},
 	"target_collection": {
-		"owner": "gayathri",
-		"project": "Tests",
-		"stack": "mm2_acquire_EM_aligner_Rough_DS_Test",
+		"owner": "russelt",
+		"project": "Reflections",
+		"stack": "Secs_1015_1099_5_reflections_mml6_ds_rough_affine",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
@@ -61,8 +62,8 @@
 	},
 	"source_point_match_collection": {
 		"server": "http://em-131fs:8080/render-ws/v1",
-		"owner": "gayathri_MM2",
-		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough",
+		"owner": "russelt",
+		"match_collection": "Dec_MM500_rough",
 		"verbose": 0
 	},
 	"verbose": 0

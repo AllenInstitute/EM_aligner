@@ -4,7 +4,7 @@ function [err, resp] = create_renderer_stack(rc)
 %
 % Author: Khaled Khairy
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-verbose = 0;
+verbose = 1;
 err = 0;
 check_input(rc);
 if ~isfield(rc, 'versionNotes'), rc.versionNotes = 'none';end
