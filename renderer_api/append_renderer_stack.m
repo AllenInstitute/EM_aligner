@@ -24,7 +24,7 @@ if nargin<5, disableValidation = 1;end
 check_input(rc, rc_base, fn, MET_format);
 
 if stack_complete(rc)
-    set_renderer_stack_state_LOADING(rc);
+    set_renderer_stack_state_loading(rc);
 end
 if ~isfield(rc, 'renderbinPath')
     rc.renderbinPath = '/data/nc-em2/gayathrim/Janelia_Pipeline/renderBin/bin';
