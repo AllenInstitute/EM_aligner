@@ -5,6 +5,8 @@ function system_solve_helper_ingest_into_renderer_database(rc, rcout, ...
 if ~isfield(opts, 'translate_to_positive_space'),
     opts.translate_to_positive_space = 1;
 end
+if ~isfield(opts, 'close_stack'), opts.close_stack =1; end
+
 if ~isempty(rcout)
     disp('--------------- Ingesting data .....');
     
@@ -46,9 +48,11 @@ if ~isempty(rcout)
             tIds(vec), z_val(vec), v, opts.disableValidation);
     end
     
-    % % complete stack
-    disp(' .... completing stack...');
-    resp = set_renderer_stack_state_complete(rcout);
+    if opts.close_stack
+        % % complete stack
+        disp(' .... completing stack...');
+        resp = set_renderer_stack_state_complete(rcout);
+    end
 else
     warning('Not ingesting anything because output collection is not specified');
 end

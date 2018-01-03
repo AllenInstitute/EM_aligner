@@ -95,6 +95,7 @@ if ~isfield(opts, 'filter_point_matches'), opts.filter_point_matches = 0;end
 if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
 if ~isfield(opts, 'xfac'), opts.xfac = 1;end;
 if ~isfield(opts, 'xfac'), opts.yfac = 1;end;
+if ~isfield(opts, 'close_stack'), opts.close_stack =1; end
 
 
 err = [];
@@ -450,9 +451,12 @@ if ~isempty(rcout)
     end
     
     
-    % % complete stack
-    disp(' .... completing stack...');
-    resp = set_renderer_stack_state_complete(rcout);
+   
+    if opts.close_stack
+        % % complete stack
+        disp(' .... completing stack...');
+        resp = set_renderer_stack_state_complete(rcout);
+    end
 end
 disp('Ingested:');
 disp(rcout);
