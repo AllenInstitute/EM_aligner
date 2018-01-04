@@ -100,7 +100,8 @@ else
     if ~isfield(opts, 'use_peg'), opts.use_peg = 0;end
     if ~isfield(opts, 'nbrs_step'), opts.nbrs_step = 1;end
     if ~isfield(opts, 'delete_existing_collection'), opts.delete_existing_collection = 1; end    
-    
+    if ~isfield(opts, 'close_stack'), opts.close_stack =1; end
+
     err = [];
     R = [];
     xout = [];
@@ -447,9 +448,11 @@ else
         end
         
         
-        % % complete stack
-        disp(' .... completing stack...');
-        resp = set_renderer_stack_state_complete(rcout);
+        if opts.close_stack
+            % % complete stack
+            disp(' .... completing stack...');
+            resp = set_renderer_stack_state_complete(rcout);
+        end
     end
     disp('.... done!');
     diary off;

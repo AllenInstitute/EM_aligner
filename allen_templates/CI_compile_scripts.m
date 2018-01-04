@@ -14,7 +14,7 @@ try
 
     cmd = sprintf('mcc -m -R -nodesktop -v %s/allen_templates/em_solver.m -N -p %s -p vision -a %s -a %s -a %s -d %s', EM_ALIGNER_ROOT, EM_ALIGNER_ROOT, solver_scripts, jsonlab_scripts, classes, OUTPUT_FOLDER);
 
-    eval(cmd7);
+    eval(cmd);
 catch M
     disp(M);
     exit(1);
