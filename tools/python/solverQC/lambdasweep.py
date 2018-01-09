@@ -6,22 +6,34 @@ import json
 import renderapi
 
 dirs = []
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.7/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.8/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.9/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.10/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.11/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.12/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.13/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.14/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.15/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.17/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.18/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.19/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.20/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.21/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.22/')
-dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.23/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.7/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.8/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.9/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.10/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.11/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.12/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.13/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.14/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.15/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.16/')
+dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171213.17/')
+
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.7/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.8/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.9/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.10/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.11/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.12/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.13/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.14/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.15/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.17/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.18/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.19/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.20/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.21/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.22/')
+#dirs.append('/allen/programs/celltypes/workgroups/em-connectomics/danielk/solver_exchange/matlab/20171211.23/')
 
 inputs = []
 lam = []
@@ -51,10 +63,10 @@ for d in dirs:
     tmpscaley = 0.0
     tmprot = 0.0
     for t in result_stack:
-        #tmpshear = tmpshear+np.abs(t.tforms[1].shear)
-        #tmprot = tmprot+np.abs(t.tforms[1].rotation)
-        tmpshear = tmpshear+(t.tforms[1].shear)
-        tmprot = tmprot+(t.tforms[1].rotation)
+        tmpshear = tmpshear+np.abs(t.tforms[1].shear)
+        tmprot = tmprot+np.abs(t.tforms[1].rotation)
+        #tmpshear = tmpshear+(t.tforms[1].shear)
+        #tmprot = tmprot+(t.tforms[1].rotation)
         tmpscalex = tmpscalex+np.abs(t.tforms[1].scale[0])
         tmpscaley = tmpscaley+np.abs(t.tforms[1].scale[1])
     tmpshear = tmpshear/len(result_stack)
@@ -76,7 +88,7 @@ for i in np.arange(len(dirs)):
     err.append(d.err)
 for j in np.arange(len(dirs)):
     i = ind[j]
-    print '%0.2e %0.2e %0.2f %0.2f %0.2f %0.2f'%(lam[i],d.err,shear[i],rot[i],scalex[i],scaley[i])
+    print '%0.2e %0.2e %0.2f %0.2f %0.2f %0.2f'%(lam[i],err[i],shear[i],rot[i],scalex[i],scaley[i])
 
 lam = np.array(lam)
 err = np.array(err)
@@ -119,3 +131,20 @@ plt.ylabel('avg y scale')
 plt.grid()
 plt.xlabel('regularization lambda')
 plt.show()
+
+im1 = np.arange(0,1500000)
+im2 = np.arange(3000000,4500000)
+ic = np.arange(2000000,2500000)
+
+print 'lam montage1 montage2 cross'
+for j in np.arange(len(dirs)):
+    i = ind[j]
+    d = mlc.Diagnostics(dirs[i],'Diagnostics',words=False,plot=False)
+    pstr='%s %0.2e'%(dirs[i].split('/')[-2],lam[i])
+    for ix in [im1,im2,ic]:
+        pstr=pstr+' %0.1f'%np.abs(d.residuals[ix]).mean()
+        pstr=pstr+' %0.1f'%d.residuals[ix].std()
+        pstr=pstr+' %0.1f'%d.residuals[ix].min()
+        pstr=pstr+' %0.1f  '%d.residuals[ix].max()
+    print pstr
+

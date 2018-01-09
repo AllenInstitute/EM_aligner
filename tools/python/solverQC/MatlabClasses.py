@@ -111,20 +111,18 @@ class Diagnostics:
          
         
 class PointMatches:
-    def __init__(self,fdir,fname,plot=True):
+    def __init__(self,fdir,fname,words=True,plot=True):
         self.fdir=fdir
         self.fname=fname
         self.raw=(loadmat(fdir+'/'+fname))['PM']
         self.parse()
-        self.words()
+        if words:
+            self.words()
         if plot:
             self.plot_overview()
 
     def parse(self):
         self.ntilepairs = len(self.raw[0][0][0])
-        self.nptsperpair = np.zeros(self.ntilepairs)
-        for i in np.arange(self.ntilepairs):
-            self.nptsperpair[i] = len(self.raw[0][0][0][i][0]) 
         self.adj = (self.raw['adj'][0][0]).astype('int16')
         self.np = self.raw['np'][0][0].flatten()
         self.ntiles = self.adj.max()
@@ -132,20 +130,20 @@ class PointMatches:
     def words(self):
         print 'Read from %s/%s'%(self.fdir,self.fname)
         print 'number of tile pairs : %d'%self.ntilepairs
-        print 'average pts per pair : %0.1f'%(self.nptsperpair.mean())
+        print 'average pts per pair : %0.1f'%(self.np.mean())
 
     def plot_overview(self):
         f=plt.figure()
         plt.subplot(2,1,1)
-        plt.plot(self.nptsperpair,'.')
-        plt.xlim(0,self.nptsperpair.size)
+        plt.plot(self.np,'.')
+        plt.xlim(0,self.np.size)
         plt.grid()
         plt.xlabel('tile pair number')
         plt.ylabel('points per pair')
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
 
         plt.subplot(2,2,3)
-        plt.hist(self.nptsperpair,bins=20)
+        plt.hist(self.np,bins=20)
         plt.grid()
         plt.ylabel('# pts per tile pair')
         plt.xlabel('# of tile pairs')

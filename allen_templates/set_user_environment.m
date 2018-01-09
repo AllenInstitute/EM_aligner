@@ -1,7 +1,7 @@
 function sl = set_user_environment(sl)
 
 %always write to your own stacks
-sl.target_collection.owner = getenv('USER');
+%sl.target_collection.owner = getenv('USER');
 
 %where to put log files
 sl.solver_options.logging.logroot = getenv('EMA_LOGROOT');

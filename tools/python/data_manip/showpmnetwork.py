@@ -12,8 +12,8 @@ cross=False
 
 #limit how many zeros we look up
 #zvalues = [1064]
-zmin = 1015
-zmax = 1519
+zmin = 1023
+zmax = 1034
 maxdepth=2
 nfig=1
 
@@ -21,20 +21,20 @@ nfig=1
 #collection_name = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine'
 #collection_name = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_1023_1034'
 #collection_owner='gayathri_MM2'
-#collection_name = 'NewPMS_combined_with_montage'
-#collection_owner='danielk'
-collection_name = 'Dec_MM500_t1'
-collection_owner='russelt'
-#stack_name = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039'
-#stack_owner = 'gayathri'
-#stack_project = 'MM2'
+collection_name = 'NewPMS_combined_with_montage'
+collection_owner='danielk'
+#collection_name = 'Dec_MM500_t2'
+#collection_owner='russelt'
+stack_name = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v2'
+stack_owner = 'gayathri'
+stack_project = 'MM2'
 #collection_name = 'Secs_1015_1099_5_reflections'
 #collection_owner = 'danielk'
 #collection_name = 'Dec_MM500_t1'
 #collection_owner = 'russelt'
-stack_name = 'Secs_1015_1099_5_reflections'
-stack_owner='danielk'
-stack_project = 'Reflections'
+#stack_name = 'Secs_1015_1099_5_reflections'
+#stack_owner='danielk'
+#stack_project = 'Reflections'
 
 scripts = '/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts/'
 
@@ -77,7 +77,7 @@ def specs(z):
 
 pdf = PdfPages('pdfout/%s.pdf'%collection_name)
 
-for cross in [False]:
+for cross in [False,True]:
     for i in np.arange(ng):
        #loop of first section
        zmontage1 = groups[i]

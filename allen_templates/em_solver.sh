@@ -37,4 +37,10 @@ export EMA_RENDERBINPATH=/allen/programs/celltypes/workgroups/em-connectomics/ga
 export EMA_SERVICE_HOST=em-131fs:8080
 
 #run the matlab with the input file as the argument
+
+#affine
 /allen/programs/celltypes/workgroups/em-connectomics/danielk/EM_aligner/allen_templates/run_system_solve_affine_with_constraint_SL.sh $mcr $logdir/input.json
+
+#rigid (uniform scaling, rotation, translation)
+#/allen/programs/celltypes/workgroups/em-connectomics/danielk/EM_aligner/allen_templates/run_system_solve_rigid_approximation_SL.sh $mcr $logdir/input.json
+

@@ -7,14 +7,16 @@ from descartes.patch import PolygonPatch
 import numpy as np
 
 #specify the section
-z = 1047
+z = 1015
 fig=plt.figure(z)
 #specify the stacks for comparison
 stacks = []
 stacks.append(['gayathri','MM2','mm2_acquire_8bit_reimage_postVOXA_TEMCA2_rev1039'])
 stacks.append(['gayathri','MM2','mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Montage_rev1039'])
 stacks.append(['gayathri','MM2','mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v2'])
-#stacks.append(['danielk','Seams','single_section'])
+stacks.append(['danielk','Reflections','Secs_1015_1099_5_reflections'])
+stacks.append(['danielk','Reflections','2_sections_outside_grp3'])
+stacks.append(['danielk','Reflections','2_sections_outside_grp4'])
 #stacks.append(['danielk','Seams','two_sections'])
 #stacks.append(['danielk','Seams','two_sections_tf_1em3'])
 #stacks.append(['danielk','Seams','two_sections_constr_z'])
@@ -54,6 +56,8 @@ def trunc_id(tileid):
     return tmp[-2]+'_'+tmp[-1]
 
 def fixpi(arr):
+    if arr.std()>0.5:
+        arr = arr+np.pi
     ind = np.argwhere(arr>np.pi)
     while len(ind)!=0:
         arr[ind] = arr[ind]-2.0*np.pi
@@ -104,9 +108,6 @@ for j in np.arange(nstack):
     #some pi ambiguity    
     shearlist = fixpi(np.array(shearlist))
     rotlist = fixpi(np.array(rotlist))
-    if np.array(rotlist).std() > 0.5:
-        rotlist = fixpi(np.array(rotlist+np.pi))
-        
     
     cs = [shearlist,rotlist,xscalelist,yscalelist,xtrans,ytrans]
     titles=['shear','rotation','xscale','yscale','xtranslation','ytranslation']
@@ -160,12 +161,12 @@ for i in np.arange(len(Pcollections[0])):
     else:
         clims=[cmin,cmax]
     print clims
-    #if i==0:
-    #    clims=[-0.025,0.025]
-    #if i==1:
-    #    clims=[-0.025,0.075]
-    #if (i==2)|(i==3):
-    #    clims=[0.95,1.05]
+    if i==0:
+        clims=[-0.025,0.025]
+    if i==1:
+        clims=[-0.025,0.075]
+    if (i==2)|(i==3):
+        clims=[0.95,1.05]
     for j in np.arange(len(Pcollections)):
         plt.subplot(nstack,6,j*6+i+1)
         Pcollections[j][i].set_clim(clims)

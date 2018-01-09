@@ -7,9 +7,9 @@ from descartes.patch import PolygonPatch
 import numpy as np
 
 #specify the sectionA
-source_stack = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_rev1039'
+source_stack = 'mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Rough_rev1039_v2'
 project = 'MM2'
-z = 1023
+z = 1028
 
 #create a renderapi.connect.Render object
 #start with the full stack

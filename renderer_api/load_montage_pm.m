@@ -27,7 +27,8 @@ for six = 1:numel(sID)  % loop over reacquires (if any)
     %tic;disp(sprintf('a %s %f',sID{six},toc));
     tic;
     jj = get_pms_montage(pm, sID{six}, wopts);
-    disp(sprintf('loaded montage %s        %0.1f seconds',sID{six},toc));tic;
+    disp(six);
+    disp(sprintf('loaded montage %s        %0.1f seconds %d\n',sID{six},toc,size(jj)));tic;
     n1 = n1 + numel(jj);
     for jix = 1:numel(jj)
         if size(jj(jix).matches.p',1)>=min_points
