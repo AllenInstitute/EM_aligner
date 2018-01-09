@@ -37,8 +37,22 @@ try
     for pix = 1:numel(pm)
         urlChar = sprintf('%s/owner/%s/matchCollection/%s/group/%s/matchesWithinGroup', ...
             pm(pix).server, pm(pix).owner, pm(pix).match_collection, sID);
-        jresp = webread(urlChar, wopts);
+        
+        %original, json structuring fails for large files and returns zero
+        %jresp = webread(urlChar, wopts);
+        %jj = [jj; jresp];
+        
+        %new, offload json decoding to separate function
+        wopts.ContentType = 'raw';
+        jresp = jsondecode(webread(urlChar, wopts));
         jj = [jj; jresp];
+        wopts.ContentType = 'auto';
+
+        %this was for manual loading.
+        %fname='/home/danielk/tmp/1421.json';
+        %jresp = loadjson(char(fname));
+        %jj = cat(1, jresp{:});
+        
     end
 catch err_fetch_pm
     kk_disp_err(err_fetch_pm)
@@ -48,8 +62,16 @@ catch err_fetch_pm
         urlChar = sprintf('%s/owner/%s/matchCollection/%s/group/%s/matchesWithinGroup', ...
             pm(pix).server, pm(pix).owner, pm(pix).match_collection, sID);
         try
-            jresp = webread(urlChar, wopts);
+            %original
+            %jresp = webread(urlChar, wopts);
+            %jj = [jj; jresp];
+            
+            %new, offload json decoding to separate function
+            wopts.ContentType = 'raw';
+            jresp = jsondecode(webread(urlChar, wopts));
             jj = [jj; jresp];
+            wopts.ContentType = 'auto';
+            
         catch err_fetch_pm_try_02
             disp(['Not able to get montage point-matches:']);
             disp(urlChar);
