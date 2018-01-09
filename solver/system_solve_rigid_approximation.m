@@ -289,7 +289,7 @@ if ~isempty(rcout)
     if opts.close_stack
         % % complete stack
         disp(' .... completing stack...');
-        resp = set_renderer_stack_state_complete(rcout);
+        resp = set_renderer_stack_state_complete(rctemp);
     end
 end
 disp('.... done!');

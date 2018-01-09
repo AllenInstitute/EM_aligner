@@ -1,23 +1,23 @@
 {
-	"first_section": 1065,
-	"last_section": 1100,
+	"first_section": 1023,
+	"last_section": 1034,
 	"solver_options": {
 		"degree": 1,
 		"solver": "backslash",
 		"transfac": 1,
-		"lambda": 0.0001,
-		"edge_lambda": 0.0001,
+		"lambda": 0.0005,
+		"edge_lambda": 0.0005,
 		"nbrs": 2,
 		"nbrs_step": 1,
 		"xs_weight": 1,
 		"min_points": 3,
 		"max_points": "_Inf_",
-		"filter_point_matches": 1,
+		"filter_point_matches": 0,
 		"outlier_lambda": 1000,
 		"min_tiles": 2,
         "Width":3840,
         "Height":3840,
-        "outside_group":0,
+        "outside_group":1,
 		"pastix": {
 			"ncpus": 8,
 			"parms_fn": "/nrs/flyTEM/khairy/FAFB00v13/matlab_production_scripts/params_file.txt",
@@ -54,7 +54,7 @@
 	"target_collection": {
 		"owner": "gayathri",
 		"project": "Tests",
-		"stack": "mm2_acquire_EM_aligner_Affine_Fine_Rigid_Rough_6",
+		"stack": "mm2_acquire_1023_1034_Fine_Affine",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
@@ -63,7 +63,7 @@
 	"source_point_match_collection": {
 		"server": "http://em-131fs:8080/render-ws/v1",
 		"owner": "gayathri_MM2",
-		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_rev1039",
+		"match_collection": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_1023_1034_with_montage",
 		"verbose": 0
 	},
 	"verbose": 0

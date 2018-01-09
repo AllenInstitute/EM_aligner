@@ -1,8 +1,8 @@
 {
 	"first_section": 1015,
-	"last_section": 1519,
+	"last_section": 1020,
 	"solver_options": {
-		"degree": 1,
+		"degree": 0,
 		"solver": "backslash",
 		"transfac": 1e-15,
 		"lambda": 100.0,
@@ -25,7 +25,7 @@
 		},
 		"matrix_only": 0,
 		"distribute_A": 16,
-		"dir_scratch": "/allen/aibs/pipeline/image_processing/volume_assembly/scratch",
+		"dir_scratch": "/allen/aibs/pipeline/image_processing/volume_assembly/scratch/scratch",
 		"distributed": 0,
 		"disableValidation": 1,
 		"use_peg": 0,
@@ -43,18 +43,18 @@
 		"constraint_fac": 1e+15
 	},
 	"source_collection": {
-		"owner": "russelt",
-		"project": "Reflections",
-		"stack": "Secs_1015_1099_5_reflections_mml6_ds_montage",
+		"owner": "gayathri",
+		"project": "Tests",
+		"stack": "Secs_1015_1099_5_reflections_ds_montage",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
 		"verbose": 0
 	},
 	"target_collection": {
-		"owner": "russelt",
-		"project": "Reflections",
-		"stack": "Secs_1015_1099_5_reflections_mml6_ds_rough_affine",
+		"owner": "gayathri",
+		"project": "Tests",
+		"stack": "Secs_1015_1099_5_reflections_ds_rough_rigid",
 		"service_host": "em-131fs:8080",
 		"baseURL": "http://em-131fs:8080/render-ws/v1",
 		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_latest/render-ws-java-client/src/main/scripts",
@@ -62,8 +62,8 @@
 	},
 	"source_point_match_collection": {
 		"server": "http://em-131fs:8080/render-ws/v1",
-		"owner": "russelt",
-		"match_collection": "Dec_MM500_rough",
+		"owner": "gayathri_MM2",
+		"match_collection": "Secs_1015_1099_5_reflections_rough_test_pm",
 		"verbose": 0
 	},
 	"verbose": 0
