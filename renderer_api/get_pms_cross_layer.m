@@ -58,7 +58,13 @@ try
              urlChar = sprintf('%s/owner/%s/matchCollection/%s/group/%s/matchesWith/%s', ...
                 pm(pix).server, pm(pix).owner, pm(pix).match_collection, sID1, sID2);
         end
-        jj =[jj; webread(urlChar, wopts)];
+        %original, fails for large jsons
+        %jj =[jj; webread(urlChar, wopts)];
+        
+        %new, offload json decoding to separate function
+        wopts.ContentType = 'raw';
+        jj = [jj; jsondecode(webread(urlChar, wopts))];
+        wopts.ContentType = 'auto';
     end
 catch err_fetch_pm
     kk_disp_err(err_fetch_pm)
@@ -72,7 +78,13 @@ catch err_fetch_pm
             urlChar = sprintf('%s/owner/%s/matchCollection/%s/group/%s/matchesWith/%s', ...
                 pm(pix).server, pm(pix).owner, pm(pix).match_collection, sID1, sID2);
         end
-        jj =[jj; webread(urlChar, wopts)];
+        %original, fails for large jsons
+        %jj =[jj; webread(urlChar, wopts)];
+        
+        %new, offload json decoding to separate function
+        wopts.ContentType = 'raw';
+        jj = [jj; jsondecode(webread(urlChar, wopts))];
+        wopts.ContentType = 'auto';
     end
 end
 if outside_group
@@ -88,4 +100,3 @@ if numel(pm)>1
     jj = concatenate_point_match_sets(jj);
 end
 %%%%%%%%%%%%%%%
-
