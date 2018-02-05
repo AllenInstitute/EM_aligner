@@ -120,6 +120,8 @@ adj = PM.adj;
 W = PM.W;
 np = PM.np;
 
+PM
+
 
 disp(' ..... done!');diary off;diary on;
 %% Step 3: generate row slabs of matrix A
